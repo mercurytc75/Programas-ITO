@@ -1,7 +1,9 @@
 package Mineria;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Clase Bodega: almacena temporalmente los minerales antes de ser refinados
@@ -11,11 +13,13 @@ public class Bodega {
     private List<Mineral> mineralesAlmacenados;
     private int capacidadMaxima;
     private int espacioDisponible;
+    private Map<String, Integer> mineralesClasificados;
     
-    public Bodega(int capacidadMaxima) {
-        this.capacidadMaxima = capacidadMaxima;
+    public Bodega() {
+        this.capacidadMaxima = 500;  // Capacidad por defecto
         this.espacioDisponible = capacidadMaxima;
         this.mineralesAlmacenados = new ArrayList<>();
+        this.mineralesClasificados = new LinkedHashMap<>();
     }
     
     /**
@@ -26,14 +30,17 @@ public class Bodega {
     public synchronized boolean almacenar(List<Mineral> minerales) {
         if (espacioDisponible >= minerales.size()) {
             mineralesAlmacenados.addAll(minerales);
+            for (Mineral mineral : minerales) {
+                mineralesClasificados.merge(mineral.getTipo(), 1, Integer::sum);
+            }
             espacioDisponible -= minerales.size();
             
-            System.out.println("📦 [BODEGA] " + minerales.size() + " minerales almacenados. " +
-                             "Espacio disponible: " + espacioDisponible + "/" + capacidadMaxima);
+            System.out.printf("[BODEGA] %d minerales almacenados. Espacio disponible: %d/%d%n",
+                    minerales.size(), espacioDisponible, capacidadMaxima);
             return true;
         } else {
-            System.out.println("❌ [BODEGA] No hay espacio suficiente. Disponible: " + 
-                             espacioDisponible + ", solicitado: " + minerales.size());
+            System.out.printf("[BODEGA] No hay espacio suficiente. Disponible: %d, solicitado: %d%n",
+                    espacioDisponible, minerales.size());
             return false;
         }
     }
@@ -52,8 +59,8 @@ public class Bodega {
         }
         
         espacioDisponible += aRetirar;
-        System.out.println("📤 [BODEGA] " + aRetirar + " minerales retirados. " +
-                         "Espacio disponible: " + espacioDisponible + "/" + capacidadMaxima);
+        System.out.printf("[BODEGA] %d minerales retirados. Espacio disponible: %d/%d%n",
+                aRetirar, espacioDisponible, capacidadMaxima);
         
         return retirados;
     }
@@ -68,5 +75,13 @@ public class Bodega {
     
     public synchronized int getCapacidadMaxima() {
         return capacidadMaxima;
+    }
+
+    public synchronized boolean isLlena() {
+        return espacioDisponible <= 0;
+    }
+
+    public synchronized Map<String, Integer> getMineralesClasificados() {
+        return new LinkedHashMap<>(mineralesClasificados);
     }
 }
