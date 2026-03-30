@@ -1,0 +1,168 @@
+sincronizados en topicos
+
+### Métodos Sincronizados en Java
+
+En Java, la palabra clave `synchronized` se utiliza para controlar 
+el acceso de múltiples hilos a un recurso compartido. Un método sincronizado 
+garantiza que solo un hilo a la vez pueda ejecutar ese método para una instancia 
+específica del objeto.
+
+#### 1. ¿Cómo funcionan?
+Cuando un hilo invoca un método sincronizado, adquiere automáticamente el 
+**bloqueo intrínseco** (monitor) de ese objeto. Mientras el hilo tenga el bloqueo,
+ningún otro hilo puede entrar en cualquier otro método sincronizado del mismo objeto. 
+El bloqueo se libera automáticamente cuando el método termina 
+(ya sea por un retorno normal o una excepción).
+
+#### 2. Tipos de Métodos Sincronizados
+
+*   **Métodos de Instancia:**
+    ```java
+    public synchronized void incrementar() {
+        this.contador++;
+    }
+    ```
+    Bloquean la instancia del objeto (`this`). Otros hilos no pueden 
+    ejecutar métodos sincronizados en la *misma instancia*, 
+    pero sí en instancias diferentes.
+
+*   **Métodos Estáticos:**
+    ```java
+    public static synchronized void log(String msg) {
+        // ...
+    }
+    ```
+    Bloquean el objeto `Class` asociado a la clase. 
+    Esto significa que solo un hilo puede ejecutar este método en toda la aplicación, 
+    independientemente de cuántas instancias existan.
+
+#### 3. ¿Por qué usarlos?
+*   **Evitar Condiciones de Carrera (Race Conditions):** 
+    Cuando dos hilos intentan modificar el mismo dato al mismo tiempo.
+*   **Visibilidad de Memoria:** Garantiza que los cambios realizados 
+    por un hilo sean visibles para otros hilos que adquieran el mismo bloqueo.
+
+#### 4. Consideraciones
+El uso excesivo de `synchronized` puede causar problemas de rendimiento 
+(overhead) o bloqueos mutuos (deadlocks) si no se gestiona con cuidado. 
+Siempre es recomendable sincronizar solo el bloque de código estrictamente necesario.
+
+---
+
+### Manejo Correcto de Hilos y Sincronización
+
+Para trabajar de manera profesional con concurrencia en Java, 
+debemos seguir ciertas prácticas y conocer las herramientas clave.
+
+#### 1. ¿Qué usaremos y cómo?
+
+*   **Interfaz `Runnable` (Preferido):**
+    En lugar de heredar de `Thread`, implementamos `Runnable`. 
+    Esto separa la tarea de la ejecución y permite que nuestra 
+    clase herede de otra si es necesario.
+    ```java
+    Runnable tarea = () -> {
+        // Código que ejecutará el hilo
+    };
+    Thread hilo = new Thread(tarea);
+    hilo.start();
+    ```
+
+*   **Bloques Sincronizados (`synchronized(lock)`):**
+    A veces no necesitamos sincronizar *todo* el método, 
+    solo unas líneas. Esto mejora el rendimiento.
+    ```java
+    private final Object lock = new Object(); // Objeto dedicado para el bloqueo
+    
+    public void metodo() {
+        // Código no crítico (paralelo)
+        synchronized(lock) {
+            // Código crítico (solo un hilo a la vez)
+        }
+    }
+    ```
+
+*   **Comunicación entre hilos (`wait()` y `notify()`):**
+    Se usan dentro de un bloque sincronizado para que los hilos "hablen" entre sí.
+    - `wait()`: El hilo se detiene y libera el bloqueo hasta que alguien lo despierte.
+    - `notify()` / `notifyAll()`: Despierta a uno o todos los hilos que están esperando ese bloqueo.
+
+#### 2. Reglas de Oro para el Manejo de Hilos
+
+1.  **Sincronizar sobre objetos finales (`final`):** El objeto que usas como bloqueo (`lock`) no debe cambiar nunca su referencia.
+2.  **Minimizar el alcance:** Mantén los bloques sincronizados lo más cortos posible.
+3.  **Evitar el estado compartido si es posible:** Si los hilos no comparten datos, no necesitan sincronización. Usa variables locales o clases inmutables.
+4.  **Usar Clases Atómicas:** Para operaciones simples como incrementar un número, usa `AtomicInteger` en lugar de `synchronized`.
+5.  **Preferir `ExecutorService`:** Para aplicaciones reales, no crees hilos manualmente con `new Thread()`. Usa un pool de hilos (`Executors.newFixedThreadPool()`).
+
+#### 3. Ejemplo de flujo de trabajo
+1.  **Definir la Tarea:** Crear una clase que implemente `Runnable`.
+2.  **Identificar el Recurso Compartido:** ¿Qué dato tocan varios hilos?
+3.  **Aplicar Sincronización:** Usar `synchronized` o bloqueos específicos en el punto exacto de colisión.
+4.  **Iniciar Ejecución:** Usar un `Thread` o un `ExecutorService`.
+
+---
+
+### Métodos Clave que Usaremos en el Manejo de Hilos
+
+Para controlar el ciclo de vida y el comportamiento de los hilos, utilizaremos principalmente estos métodos de las clases `Thread` y `Runnable`:
+
+#### 1. `run()`
+Es el "cuerpo" del hilo. Contiene todo el código que queremos que se ejecute de forma asíncrona.
+- **Uso:** Se define dentro de una clase que implementa `Runnable` o hereda de `Thread`.
+- **Nota:** **Nunca** llames a `run()` directamente si quieres que se ejecute en un nuevo hilo (eso sería una llamada a un método normal).
+
+#### 2. `start()`
+Es el método que realmente inicia el hilo.
+- **Uso:** `hilo.start();`
+- **Qué hace:** Le pide a la JVM que cree un nuevo hilo de ejecución y luego la JVM llama automáticamente al método `run()`.
+
+#### 3. `sleep(long millis)`
+Pausa la ejecución del hilo actual por un tiempo determinado.
+- **Uso:** `Thread.sleep(1000);` (Pausa 1 segundo).
+- **Para qué:** Útil para simulaciones, esperar recursos o dar tiempo a otros hilos. Lanza una excepción `InterruptedException`.
+
+#### 4. `join()`
+Permite que un hilo espere a que otro termine su ejecución.
+- **Uso:** `hiloA.join();` (El hilo actual se detiene hasta que `hiloA` finalice).
+- **Para qué:** Para coordinar tareas donde el resultado de un hilo es necesario para el siguiente paso.
+
+#### 5. `interrupt()`
+Envía una señal a un hilo para indicarle que debe detenerse o cambiar su estado actual.
+- **Uso:** `hilo.interrupt();`
+- **Para qué:** Es la forma segura de detener hilos, en lugar de usar métodos obsoletos como `stop()`.
+
+#### 6. `yield()`
+Es una sugerencia al planificador de hilos (Scheduler) de que el hilo actual está dispuesto a ceder su uso del procesador a otros hilos de igual prioridad.
+- **Uso:** `Thread.yield();`
+
+#### 7. `isAlive()`
+Comprueba si el hilo todavía se está ejecutando.
+- **Uso:** `if (hilo.isAlive()) { ... }`
+- **Retorna:** `true` si el hilo ha comenzado y aún no ha terminado.
+
+---
+
+### Métodos de Comunicación (Sincronización Avanzada)
+
+Estos métodos pertenecen a la clase `Object` y se usan para coordinar hilos que comparten un mismo bloqueo (`lock`). **Solo pueden usarse dentro de un bloque `synchronized`**.
+
+#### 8. `wait()`
+Hace que el hilo actual espere hasta que otro hilo lo despierte.
+- **Qué hace:** Libera el bloqueo del objeto y pone al hilo en estado de espera.
+- **Uso:** `lock.wait();`
+- **Para qué:** Cuando un hilo necesita que se cumpla una condición antes de seguir (ej: que un búfer no esté vacío).
+
+#### 9. `notify()`
+Despierta a **un solo hilo** que esté esperando en el objeto de bloqueo.
+- **Uso:** `lock.notify();`
+- **Nota:** No puedes elegir qué hilo despertar si hay varios esperando; el sistema elige uno al azar.
+
+#### 10. `notifyAll()`
+Despierta a **todos los hilos** que estén esperando en ese objeto de bloqueo.
+- **Uso:** `lock.notifyAll();`
+- **Para qué:** Es la opción más segura cuando varios hilos están esperando diferentes condiciones o cuando quieres que todos compitan de nuevo por el bloqueo.
+
+
+
+ 

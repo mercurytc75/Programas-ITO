@@ -1,0 +1,6 @@
+Elaborar un programa que simule una tienda donde 3 empleados 
+desean comprar productos de distintos clientes, todos comparten una caja reguistradora 
+por lo que el cobro debe de realizarse de forma ordenada permitiendo 
+que soloi un cajero use la caja ala vez para n clientes. 
+
+##############################################################

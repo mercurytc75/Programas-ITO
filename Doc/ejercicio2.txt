@@ -1,0 +1,9 @@
+en una estacicon esopacial mediaca los robost llegan a revision y se atienden en orden.
+por otro lado las erramientas del robot medico se guardan en compartimientos donde siempre se toma primero la ultima erramienta colocada.
+las oretaciones que se hacen 
+reguistrar pasiente
+atender pasiente
+mostrar siguiente pasiente 
+guardar herramienta 
+sacar  herramienta
+mostrar listado de pacientes en espera(datos del paciente  nombre, numero de serie y falla )

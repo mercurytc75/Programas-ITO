@@ -1,0 +1,64 @@
+================================================================================
+          EXPLICACIÓN TÉCNICA: SISTEMA RESTAURANTE (PRODUCTO-CONSUMIDOR)
+================================================================================
+
+1. ARQUITECTURA GENERAL
+-----------------------
+El sistema utiliza el patrón de diseño "Productor-Consumidor", un modelo clásico 
+de concurrencia donde dos tipos de procesos (hilos) comparten un recurso común.
+
+- PRODUCTORES (Meseros): Generan pedidos y los colocan en la cola.
+- CONSUMIDORES (Cocineros): Extraen pedidos de la cola y los procesan.
+- RECURSO COMPARTIDO (ColaPedidos): Actúa como un búfer (amortiguador) con 
+  capacidad limitada para evitar la saturación.
+
+2. COMPONENTES Y LÓGICA
+-----------------------
+
+A. ColaPedidos (Recurso Compartido Sincronizado):
+   Utiliza los métodos 'wait()' y 'notifyAll()' para gestionar la sincronización.
+   - Si la cola está llena, el Mesero espera (bloqueado).
+   - Si la cola está vacía, el Cocinero espera (bloqueado).
+   Esto garantiza que nunca se pierda un pedido y que no se consuma CPU 
+   innecesariamente.
+
+B. Mesero (Productor Dinámico):
+   - Se crean 10 hilos dinámicamente.
+   - Se usa '.setName()' para asignar identificadores únicos (Mesero-1, Mesero-2, etc.).
+   - Su tarea es convertir Platillos en Pedidos y enviarlos a la cocina.
+
+C. Cocinero (Consumidor de Estaciones):
+   - Se crean 3 hilos, cada uno asignado a una estación (Parrilla, Fríos, Repostería).
+   - Procesan pedidos indefinidamente hasta recibir la señal de cierre.
+
+3. FUNCIONALIDADES AVANZADAS (Puntos 4, 5 y 6)
+----------------------------------------------
+
+PUNTO 5: Gestión de Estados (Enum)
+- Se implementó 'EstadoPedido' (RECIBIDO -> EN_PREPARACION -> LISTO).
+- Permite la trazabilidad del ciclo de vida de cada orden en la consola.
+
+PUNTO 4: Corte de Caja (Ganancias)
+- Clase 'CorteDeCaja' sincronizada que suma los precios de cada platillo 
+  preparado.
+- Genera un reporte estadístico al final de la ejecución con el total ganado 
+  y el desglose por tipo de platillo.
+
+PUNTO 6: Cierre Elegante (Poison Pill)
+- El último mesero en terminar envía una "Orden de Cierre" (Pedido con estado 
+  FINALIZADO) a cada cocinero.
+- Esto permite que los hilos de los cocineros terminen de forma natural ('break' 
+  en el bucle while) en lugar de ser forzados o quedar esperando infinitamente.
+
+4. FLUJO DE EJECUCIÓN (Main)
+----------------------------
+1. Se inicializan los recursos (Cola y Corte de Caja).
+2. Se arrancan los hilos (Start).
+3. El programa principal usa '.join()' para esperar a que TODOS los empleados 
+   terminen su trabajo.
+4. Se imprime el reporte final de ganancias una vez que el restaurante está 
+   vacío y cerrado.
+
+================================================================================
+Creado por el Asistente de Código - Marzo 2026
+================================================================================

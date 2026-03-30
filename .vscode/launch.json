@@ -1,0 +1,87 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Main2",
+      "request": "launch",
+      "mainClass": "TexEditorGUI.main.Main2",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "main.Main",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "TexEditorGUI.main.Main",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "EditorTexto",
+      "request": "launch",
+      "mainClass": "TexEditor.EditorTexto",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "RestaurantePc",
+      "request": "launch",
+      "mainClass": "ProductoConsumidor.RestaurantePc",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "EstacionMedica",
+      "request": "launch",
+      "mainClass": "EstacionEspacial.EstacionMedica",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "Tienda",
+      "request": "launch",
+      "mainClass": "Tienda.Tienda",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "EjemploSincronizacion",
+      "request": "launch",
+      "mainClass": "Concurrencia.EjemploSincronizacion",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
+      "name": "SimuladorCelular",
+      "request": "launch",
+      "mainClass": "SimuladorCelular",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/mercu/Videos/JAVA_TRADE/C++",
+      "program": "c:/Users/mercu/Videos/JAVA_TRADE/C++/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

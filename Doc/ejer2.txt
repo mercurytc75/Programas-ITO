@@ -1,0 +1,52 @@
+elaborar un programe que simule un editor de texto basico donde el usauario 
+puede escribier borrar y recuperar cambios
+operaciones,  agregar linea eliminar linea desazer acvion reacer accion y mostrar doc: estructuras a usar 
+
+lista; guarda
+pila desazer
+pila segunda a reacer,
+
+nota si lo entregar grafico me excenta 
+exclusivo 
+dia martes  de bacasiones 
+
+
+
+###############################################################3
+
+
+Desarrollar un programa en java que simule un editor de texto básico 
+con interfaz 
+de consola o gráfica (opcional) que permita al usuario realizar
+ operaciones de edición fundamentales. El sistema debe implementar 
+ las siguientes funcionalidades:
+
+1. **Operaciones principales:**
+   - Agregar línea nueva al documento
+   - Eliminar línea específica por número de índice
+   - Deshacer la última acción realizada
+   - Rehacer la acción previamente deshecha
+   - Mostrar el documento completo con numeración de líneas
+
+2. **Estructuras de datos obligatorias:**
+   - Lista enlazada o array dinámico para almacenar el contenido del documento
+   - Pila (Stack) para gestionar el historial de operaciones de deshacer
+   - Pila secundaria para gestionar las operaciones de rehacer
+
+3. **Requisitos técnicos:**
+   - Implementar patrón de diseño Command para encapsular las operaciones
+   - Cada comando debe almacenar suficiente información para poder deshacerse y rehecerse
+   - Validar índices de línea antes de eliminar para evitar errores de ejecución
+   - Limpiar la pila de rehacer cuando se ejecute una nueva operación después de deshacer
+
+4. **Criterios de entrega:**
+   - Código fuente completo y documentado
+   - Interfaz de usuario intuitiva con menú de opciones numeradas
+   - Si se implementa versión gráfica, esta debe incluir botones para cada operación y área de texto visual
+   - Pruebas unitarias para cada operación
+   - Documentación de usuario explicando el funcionamiento
+
+5. **Entrega exclusiva:**
+   - Fecha límite: martes durante período de vacaciones
+   - Versión gráfica otorga exención adicional
+   - Entregar en formato comprimido con todos los archivos del proyecto

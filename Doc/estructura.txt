@@ -1,0 +1,27 @@
+pilas y colas 
+
+pila el ultimo en entrar primero en salir 
+cola el ultimo en entrar ultimo en salir 
+
+
+interface generico de que tipo de dato quiero que sea el elemento
+<T>  tipo de dato que entra que no sabemos que es 
+implementacion de metodos que ya sabemos como es 
+
+cola Queue  que implementa la cola tda <T>  lista enlazada de tipo cola 
+niestro constructor de tipo generica 
+implementamos lo que es si esta lleno vacio 
+peek() devuelve el que esta enfrente de la cola 
+size() de la clase queue para decir cuantos elemento hay en la cola 
+
+
+PilaTDA 
+
+add() mete elementos a la lista 
+isEmpty() para ver si esta vacia 
+n.elementos.remove(elementos.size() -1);
+n.elementos.get(elemento() -1);
+append() agraga el texto 
+ToString te devuelve ebuelve un String 
+
+tipos primitivos de datos y clases mayores 
