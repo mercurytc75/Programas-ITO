@@ -1,0 +1,147 @@
+================================================================================
+GUÍA DE USO DEL CÓDIGO - SIMULADOR DE MINERÍA
+================================================================================
+
+📋 CLASES CREADAS:
+================================================================================
+
+1. Mineral.java
+   - Representa un mineral con tipo (Oro, Plata, Cobre, Hierro, Diamante)
+   - Almacena peso y tiempo de recolección
+   - Clase simple de datos (POJO)
+
+2. Robot.java (extends Thread)
+   - Ejecuta minería en un hilo separado
+   - ✅ RECOLECTA ALEATORIAMENTE DE 1 A 10 MINERALES por ciclo
+   - Simula búsqueda en el mapa (1-3 segundos)
+   - Envía minerales a la fundidora de forma sincronizada
+   - Contador total de minerales recolectados
+
+3. Fundidora.java
+   - Procesa minerales de forma sincronizada (1 robot a la vez)
+   - Solo puede atender un robot simultáneamente
+   - Simula tiempo de refino (1-2 segundos)
+   - Cuenta minerales refinados y ciclos completados
+
+4. Bodega.java
+   - Almacena temporalmente minerales antes del refino
+   - Capacidad máxima configurable (50 minerales por defecto)
+   - Sincronizada para múltiples accesos
+   - Valida espacio disponible antes de almacenar
+
+5. Simulador.java (CLASE PRINCIPAL)
+   - Crea los robots, fundidora y bodega
+   - Maneja el ciclo de vida de la simulación
+   - Menú interactivo (iniciar, detener, salir)
+   - Muestra estadísticas cada 5 segundos
+   - Estadísticas finales al terminar
+
+================================================================================
+FLUJO DE EJECUCIÓN:
+================================================================================
+
+1. Usuario indica cantidad de robots (1-10)
+2. Se crea un Simulador con esa cantidad
+3. Simulador crea:
+   - N Robots (cada uno en su Thread)
+   - 1 Fundidora (sincronizada)
+   - 1 Bodega (capacidad 50)
+4. Cada robot:
+   a) Busca minerales (1-3 segundos)
+   b) Recolecta CANTIDAD ALEATORIA: 1 a 10 minerales
+   c) Los tipos son aleatorios (Oro, Plata, Cobre, Hierro, Diamante)
+   Los pesos son aleatorios (1-6 kg)
+   d) Espera turno en la fundidora
+   e) Envía a procesar (sincronizado)
+   f) Vuelve al paso a)
+5. La fundidora procesa uno a la vez
+6. La bodega almacena si hay espacio
+
+================================================================================
+SINCRONIZACIÓN IMPLEMENTADA:
+================================================================================
+
+🔒 Robot.enviarAFundidora():
+   - synchronized (fundidora)
+   - Usa wait() para esperar disponibilidad
+   - Usa notifyAll() para despertar siguientes robots
+
+🔒 Fundidora.procesarMinerales():
+   - synchronized
+   - Solo un robot procesa a la vez
+   - Protege acceso a variables compartidas
+
+🔒 Bodega.almacenar() y retirar():
+   - synchronized
+   - Protege lista compartida de minerales
+   - Valida espacio disponible
+
+================================================================================
+CÓMO COMPILAR Y EJECUTAR:
+================================================================================
+
+1. COMPILAR:
+   cd c:\Users\mercu\Videos\JAVA_TRADE\JAVA\Mineria
+   javac *.java
+
+2. EJECUTAR:
+   java mineria.Simulador
+
+3. SEGUIR LAS INDICACIONES:
+   - Ingresar cantidad de robots
+   - Elegir opción (1: iniciar, 2: detener, 3: salir)
+   - Especificar duración en segundos
+
+================================================================================
+EJEMPLO DE SALIDA:
+================================================================================
+
+🚀 INICIANDO SIMULACIÓN DE MINERÍA
+Robots: 3
+Capacidad bodega: 50 minerales
+
+🤖 Robot #1 inicia operaciones
+🤖 Robot #2 inicia operaciones
+🤖 Robot #3 inicia operaciones
+
+🔍 Robot #1 está buscando minerales...
+🔍 Robot #2 está buscando minerales...
+🔍 Robot #3 está buscando minerales...
+
+✅ Robot #1 recolectó 7 minerales: [Mineral{Oro, 2.3kg}, ...]
+✅ Robot #2 recolectó 4 minerales: [Mineral{Cobre, 1.8kg}, ...]
+⏳ Robot #1 espera turno en fundidora...
+🔥 [FUNDIDORA] Iniciando procesamiento para Robot #1
+✅ [FUNDIDORA] Procesamiento completado. 7 minerales refinados. Total: 7
+
+📊 ========== ESTADÍSTICAS ACTUALES ==========
+Fundidora - Mineral refinado: 7 | Ciclos: 1
+Bodega - Almacenado: 0 | Disponible: 50/50
+Robots activos: 3
+  Robot #1 - Recolectado: 7 | Activo: true
+  Robot #2 - Recolectado: 4 | Activo: true
+  Robot #3 - Recolectado: 0 | Activo: true
+
+================================================================================
+CARACTERÍSTICAS IMPLEMENTADAS:
+================================================================================
+
+✅ Recolección aleatoria de 1-10 minerales
+✅ Tipos de minerales variados
+✅ Sincronización de fundidora (1 robot a la vez)
+✅ Bodega con límite de capacidad
+✅ Mostrador de estadísticas en tiempo real
+✅ Menú interactivo
+✅ Control de threads (iniciar/detener)
+✅ Logging detallado con emojis
+
+================================================================================
+PRÓXIMOS PASOS (FASES 2-5):
+================================================================================
+
+Fase 2: Lógica de cola/pila para esperas
+Fase 3: Interfaz gráfica (GUI)
+Fase 4: Pruebas y optimización
+Fase 5: Documentación final
+
+================================================================================

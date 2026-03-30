@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Simulador",
+      "request": "launch",
+      "mainClass": "Mineria.Simulador",
+      "projectName": "JAVA_TRADE_b2c4717c"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "main.java.com.monopoly.Main",
@@ -72,15 +79,14 @@
       "projectName": "JAVA_TRADE_b2c4717c"
     },
     {
-            "type": "java",
-            "name": "Launch Monopoly",
-            "request": "launch",
-            "mainClass": "com.monopoly.Main",
-            "projectName": "Monopoly",
-            "cwd": "${workspaceFolder}",
-            "console": "integratedTerminal"
+      "type": "java",
+      "name": "Launch Monopoly",
+      "request": "launch",
+      "mainClass": "com.monopoly.Main",
+      "projectName": "Monopoly",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
     },
-
     {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",

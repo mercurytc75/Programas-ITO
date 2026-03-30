@@ -1,0 +1,117 @@
+================================================================================
+PLAN DE PROYECTO: VIDEOJUEGO DE MINERÍA CON ROBOTS RECOLECTORES
+================================================================================
+
+DESCRIPCIÓN GENERAL:
+Simulador de minería automatizada en un planeta remoto con robots mineros 
+(hilos) que recolectan minerales y los transportan a una fundidora central.
+
+================================================================================
+COMPONENTES PRINCIPALES A IMPLEMENTAR:
+================================================================================
+
+1. ESTRUCTURA DE DATOS (TDAs):
+   - Cola (para esperar turno en la fundidora)
+   - Pila (para almacenar herramientas en la estación espacial)
+   - Lista enlazada (opcional, para registros de minería)
+
+2. LÓGICA DE MINERÍA:
+   - Cada Robot recolecta una cantidad ALEATORIA de 1 a 10 minerales
+   - La recolección se simula con un delay natural
+   - Los minerales se transportan a la fundidora
+
+2. HILOS:
+   - Clase Robot (extends Thread): ejecuta minería de forma independiente
+   - Clase Fundidora: procesa minerales (sincronización)
+   - Clase Bodega: almacena minerales temporalmente
+
+3. SINCRONIZACIÓN:
+   - Acceso compartido a la Fundidora (máximo 1 robot a la vez)
+   - Acceso compartido a la Bodega (múltiples robots, límite de capacidad)
+   - Manejo de esperas cuando recursos están ocupados
+
+4. INTERFAZ GRÁFICA:
+   - Mostrar robots activos/inactivos
+   - Estadísticas totales: mineral recolectado, refinado
+   - Estado de la fundidora (ocupada/libre)
+   - Espacio disponible en bodega
+   - Panel visual con estado individual de cada robot
+
+5. CONTROLES:
+   - Botón Iniciar
+   - Botón Detener
+   - Botón Reanudar
+   - Botón Reiniciar
+
+================================================================================
+FASES DE IMPLEMENTACIÓN:
+================================================================================
+
+FASE 1: ESTRUCTURA BASE
+  [✓] Crear clase Robot con lógica de minería simulada
+  [✓] Crear clase Fundidora con sincronización
+  [✓] Crear clase Bodega con límite de capacidad
+  [✓] Crear clase Mineral
+  [✓] Crear clase Simulador (orquestador principal)
+
+FASE 2: LÓGICA DE HILOS
+  [ ] Robot inicia Thread ejecutando minería
+  [ ] Robot espera turno en cola para fundidora
+  [ ] Fundidora procesa minerales secuencialmente
+  [ ] Actualizar estadísticas globales
+
+FASE 3: INTERFAZ GRÁFICA (GUI)
+  [ ] Crear ventana principal con JFrame
+  [ ] Panel de estadísticas generales
+  [ ] Panel con estados individuales de robots
+  [ ] Panel de controles (botones)
+
+FASE 4: SINCRONIZACIÓN Y PRUEBAS
+  [ ] Probar con múltiples robots (5-10)
+  [ ] Validar que no haya bloqueos mutuos (deadlock)
+  [ ] Asegurar que la fundidora no atienda 2 robots simultáneamente
+  [ ] Validar límite de bodega
+
+FASE 5: PULIDO Y DOCUMENTACIÓN
+  [ ] Optimizar rendimiento visual
+  [ ] Documentar código
+  [ ] Crear README con instrucciones de uso
+
+================================================================================
+CLASES NECESARIAS:
+================================================================================
+
+- Robot.java                   (extends Thread)
+- Fundidora.java               (sincronizada)
+- Bodega.java                  (sincronizada)
+- Mineral.java                 (objeto de datos)
+- Simulador.java               (orquestador principal)
+- GUIPrincipal.java            (interfaz gráfica)
+- PanelRobots.java             (panel de visualización)
+- ControladorSimulacion.java   (manejo de eventos)
+
+================================================================================
+CONSIDERACIONES IMPORTANTES:
+================================================================================
+
+✓ Cada robot recolecta ALEATORIAMENTE entre 1 y 10 minerales por ciclo
+✓ Tipos de minerales variados: Oro, Plata, Cobre, Hierro, Diamante
+✓ Usar synchronized para proteger secciones críticas
+✓ Usar wait() y notify() para coordinación entre hilos
+✓ Validar que los robots no accedan simultáneamente a fundidora
+✓ Respetar capacidad máxima de bodega
+✓ Mostrar datos en tiempo real sin bloquear la GUI
+✓ Manejar excepciones de InterruptedException
+
+================================================================================
+PRÓXIMOS PASOS:
+================================================================================
+
+1. Confirmar estructura con archivos base
+2. Implementar TDAs (Cola, Pila)
+3. Crear la clase Robot con lógica básica
+4. Implementar sincronización en Fundidora
+5. Desarrollar GUI paso a paso
+6. Pruebas y depuración
+
+================================================================================
