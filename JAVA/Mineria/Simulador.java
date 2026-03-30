@@ -2,6 +2,7 @@ package Mineria;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -14,12 +15,13 @@ public class Simulador {
     private Bodega bodega;
     private boolean simulacionActiva;
     private int cantidadRobots;
+    private boolean resumenMostrado;
     
     public Simulador(int cantidadRobots) {
         this.cantidadRobots = cantidadRobots;
         this.robots = new ArrayList<>();
         this.fundidora = new Fundidora();
-        this.bodega = new Bodega(50);  // Capacidad de 50 minerales
+        this.bodega = new Bodega();  // Capacidad por defecto
         this.simulacionActiva = false;
     }
     
@@ -32,6 +34,10 @@ public class Simulador {
             return;
         }
         
+        robots = new ArrayList<>();
+        fundidora = new Fundidora();
+        bodega = new Bodega();
+        resumenMostrado = false;
         simulacionActiva = true;
         System.out.println("\n" + "=".repeat(60));
         System.out.println("🚀 INICIANDO SIMULACIÓN DE MINERÍA");
@@ -55,17 +61,7 @@ public class Simulador {
      * Detiene todos los robots
      */
     public void detener() {
-        if (!simulacionActiva) {
-            System.out.println("⚠️ La simulación no está en curso");
-            return;
-        }
-        
-        System.out.println("\n⛔ Deteniendo simulación...");
-        simulacionActiva = false;
-        
-        for (Robot robot : robots) {
-            robot.detener();
-        }
+        finalizarSimulacion("Detención manual");
     }
     
     /**
@@ -74,7 +70,12 @@ public class Simulador {
     private void mostrarEstadisticas() {
         while (simulacionActiva) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(1000);
+
+                if (bodega.isLlena()) {
+                    finalizarSimulacion("La bodega alcanzó su capacidad máxima de 5000 minerales");
+                    break;
+                }
                 
                 System.out.println("\n📊 ========== ESTADÍSTICAS ACTUALES ==========");
                 System.out.println("Fundidora - Mineral refinado: " + fundidora.getMineralRefinado() + 
@@ -84,7 +85,7 @@ public class Simulador {
                 
                 System.out.println("\nRobots activos: " + contarRobotsActivos());
                 for (Robot robot : robots) {
-                    System.out.println("  Robot #" + robot.getId() + " - Recolectado: " + 
+                    System.out.println("  Robot #" + robot.getRobotId() + " - Recolectado: " + 
                                      robot.getTotalMineralRecolectado() + " | Activo: " + robot.isActivo());
                 }
                 System.out.println("=".repeat(45) + "\n");
@@ -97,6 +98,23 @@ public class Simulador {
     
     private int contarRobotsActivos() {
         return (int) robots.stream().filter(Robot::isActivo).count();
+    }
+
+    private synchronized void finalizarSimulacion(String motivo) {
+        if (resumenMostrado || !simulacionActiva) {
+            return;
+        }
+
+        simulacionActiva = false;
+        System.out.println("\n⛔ Finalizando simulación: " + motivo);
+
+        for (Robot robot : robots) {
+            robot.detener();
+            robot.interrupt();
+        }
+
+        esperarTerminacion();
+        resumenMostrado = true;
     }
     
     /**
@@ -118,15 +136,31 @@ public class Simulador {
      * Muestra estadísticas finales de la simulación
      */
     private void mostrarEstadisticasFinal() {
+        int totalRecolectado = robots.stream().mapToInt(Robot::getTotalMineralRecolectado).sum();
+        int totalRefinado = fundidora.getMineralRefinado();
+        int pendientePorFundir = Math.max(0, totalRecolectado - totalRefinado);
+        Map<String, Integer> clasificacion = bodega.getMineralesClasificados();
+
         System.out.println("\n" + "=".repeat(60));
         System.out.println("📈 ESTADÍSTICAS FINALES");
         System.out.println("=".repeat(60));
-        System.out.println("Total mineral refinado: " + fundidora.getMineralRefinado());
+        System.out.println("Total mineral refinado: " + totalRefinado);
         System.out.println("Ciclos completados: " + fundidora.getCiclosCompletados());
         System.out.println("Minerales en bodega: " + bodega.getCantidadAlmacenada());
+        System.out.println("Clasificación en bodega:");
+        if (clasificacion.isEmpty()) {
+            System.out.println("  Sin minerales almacenados");
+        } else {
+            for (Map.Entry<String, Integer> entry : clasificacion.entrySet()) {
+                System.out.println("  - " + entry.getKey() + ": " + entry.getValue());
+            }
+        }
+        System.out.println("Total recolectado por todos los robots: " + totalRecolectado);
+        System.out.println("Lo que faltó por fundir: " + pendientePorFundir);
+        System.out.println("Capacidad usada de bodega: " + bodega.getCantidadAlmacenada() + "/" + bodega.getCapacidadMaxima());
         System.out.println("\nDetalle por robot:");
         for (Robot robot : robots) {
-            System.out.println("  Robot #" + robot.getId() + ": " + robot.getTotalMineralRecolectado() + " minerales");
+            System.out.println("  Robot #" + robot.getRobotId() + ": " + robot.getTotalMineralRecolectado() + " minerales");
         }
         System.out.println("=".repeat(60) + "\n");
     }

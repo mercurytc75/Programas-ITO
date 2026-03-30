@@ -29,7 +29,7 @@ public class Fundidora {
             ocupada = true;
             robotActual = idRobot;
             
-            System.out.println("🔥 [FUNDIDORA] Iniciando procesamiento para Robot #" + idRobot);
+            System.out.printf("[FUNDIDORA] Iniciando procesamiento para Robot #%d%n", idRobot);
             
             // Simular tiempo de refino (1-2 segundos por lote)
             int tiempoRefino = 1000 + (int)(Math.random() * 1000);
@@ -40,8 +40,8 @@ public class Fundidora {
             mineralRefinado += cantidadProcesada;
             ciclosCompletados++;
             
-            System.out.println("✅ [FUNDIDORA] Procesamiento completado. " + cantidadProcesada + 
-                             " minerales refinados. Total: " + mineralRefinado);
+            System.out.printf("[FUNDIDORA] Procesamiento completado. %d minerales refinados. Total: %d%n",
+                    cantidadProcesada, mineralRefinado);
             
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
