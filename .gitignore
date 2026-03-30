@@ -1,0 +1,35 @@
+# Ignorar archivos compilados
+*.class
+*.jar
+*.war
+*.exe
+
+# Ignorar directorios de compilación
+bin/
+build/
+dist/
+target/
+
+# IDEs
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+*.iws
+*.ipr
+.netbeans/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.bak
+*.tmp
+*.log
+*~
+
+# Directorios de dependencias
+/lib/
+/vendor/

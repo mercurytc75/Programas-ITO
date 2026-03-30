@@ -1,4 +1,4 @@
-package model;
+package com.monopoly.model;
 
 public class Propiedad {
     private String nombre;
@@ -6,29 +6,34 @@ public class Propiedad {
     private int renta;
     private Jugador duenio;
 
-    public Propiedad(String nombre, int precio, int renta){
+    public Propiedad(String nombre, int precio, int renta) {
         this.nombre = nombre;
         this.precio = precio;
         this.renta = renta;
         this.duenio = null; // sin dueño inicial
     }
 
-    public boolean tieneDuenio(){
+    public boolean tieneDuenio() {
         return duenio != null;
     }
-    public void setDuenio(Jugador duenio){
+
+    public void setDuenio(Jugador duenio) {
         this.duenio = duenio;
     }
-    private Jugador getDuenio(){
+
+    public Jugador getDuenio() {
         return duenio;
     }
-    public int getPrecio(){
+
+    public int getPrecio() {
         return precio;
     }
-    public int getRenta(){
+
+    public int getRenta() {
         return renta;
     }
-    public String getNombre(){
+
+    public String getNombre() {
         return nombre;
     }
 }

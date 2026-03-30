@@ -1,19 +1,19 @@
-package tda;
+package com.monopoly.tda;
 
 public class Cola<T> {
-    private Nodo <T> frente;
-    private Nodo <T> fin;
+    private Nodo<T> frente;
+    private Nodo<T> fin;
 
     public Cola() {
         frente = null;
         fin = null;
     }
 
-    public boolean estaVacia(){
+    public boolean estaVacia() {
         return frente == null;
     }
 
-    public void encolar(T dato){
+    public void encolar(T dato) {
         Nodo<T> nuevo = new Nodo<T>(dato);
         if (estaVacia()) {
             frente = nuevo;
@@ -23,21 +23,20 @@ public class Cola<T> {
         fin = nuevo;
     }
 
-    public T descolar(){
-        if(estaVacia()){
+    public T descolar() {
+        if (estaVacia()) {
             return null;
         }
         T dato = frente.getDato();
         frente = frente.getSiguiente();
 
-        if(frente  == null){
+        if (frente == null) {
             fin = null;
         }
         return dato;
     }
-    
-    public T verFrente(){
+
+    public T verFrente() {
         return estaVacia() ? null : frente.getDato();
     }
-
 }

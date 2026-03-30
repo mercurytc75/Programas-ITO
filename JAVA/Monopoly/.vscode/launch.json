@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Monopoly",
+            "request": "launch",
+            "mainClass": "com.monopoly.Main",
+            "projectName": "Monopoly",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}
