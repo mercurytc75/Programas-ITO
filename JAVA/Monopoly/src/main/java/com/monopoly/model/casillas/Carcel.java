@@ -8,13 +8,12 @@ public class Carcel extends Casilla {
     }
 
     @Override
-    public void efecto(Jugador jugador) {
+    public String efecto(Jugador jugador) {
         jugador.encarcelar();
-        System.out.println(jugador.getNombre() + " cayó en la cárcel!");
+        return jugador.getNombre() + " cayó en la cárcel!";
     }
 
     public void salirDeCarcel(Jugador jugador) {
         jugador.salirDeCarcel();
-        System.out.println(jugador.getNombre() + " salió de la cárcel!");
     }
 }

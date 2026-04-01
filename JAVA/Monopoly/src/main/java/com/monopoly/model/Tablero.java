@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Tablero {
     private Casilla[] casillas;
-    private static final int TOTAL_CASILLAS = 40;
+    public static final int TOTAL_CASILLAS = 40;
     private Random dado;
 
     public Tablero() {
@@ -39,15 +39,29 @@ public class Tablero {
         return casillas[posicion];
     }
 
-    public void procesarCasilla(Jugador jugador) {
+    public String procesarCasilla(Jugador jugador) {
         int posicion = jugador.getPosicion();
         Casilla casilla = casillas[posicion];
 
         if (casilla != null) {
-            casilla.efecto(jugador);
-        } else {
-            System.out.println(jugador.getNombre() + " está en una propiedad sin dueño en la posición " + posicion);
+            return casilla.efecto(jugador);
         }
+
+        return jugador.getNombre() + " está en una propiedad sin dueño en la posición " + posicion;
+    }
+
+    public int getTotalCasillas() {
+        return TOTAL_CASILLAS;
+    }
+
+    public String getNombreCasilla(int posicion) {
+        Casilla casilla = casillas[posicion];
+
+        if (casilla != null) {
+            return casilla.getNombre();
+        }
+
+        return "Propiedad";
     }
 
     public void crearPropiedad(int posicion, String nombre, int precio, int renta) {

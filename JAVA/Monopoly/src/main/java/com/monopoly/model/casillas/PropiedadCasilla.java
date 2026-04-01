@@ -12,18 +12,21 @@ public class PropiedadCasilla extends Casilla {
     }
 
     @Override
-    public void efecto(Jugador jugador) {
+    public String efecto(Jugador jugador) {
         if (!propiedad.tieneDuenio()) {
-            System.out.println(jugador.getNombre() + " llegó a " + nombre + " (Precio: $" + propiedad.getPrecio() + ")");
-        } else {
-            Jugador duenio = propiedad.getDuenio();
-            int renta = propiedad.getRenta();
-            if (!duenio.equals(jugador)) {
-                System.out.println(jugador.getNombre() + " debe pagar renta de $" + renta + " a " + duenio.getNombre());
-                jugador.pagar(renta);
-                duenio.recibir(renta);
-            }
+            return jugador.getNombre() + " llegó a " + nombre + " (Precio: $" + propiedad.getPrecio() + ")";
         }
+
+        Jugador duenio = propiedad.getDuenio();
+        int renta = propiedad.getRenta();
+
+        if (!duenio.equals(jugador)) {
+            jugador.pagar(renta);
+            duenio.recibir(renta);
+            return jugador.getNombre() + " debe pagar renta de $" + renta + " a " + duenio.getNombre();
+        }
+
+        return jugador.getNombre() + " cayó en su propia propiedad: " + nombre;
     }
 
     public Propiedad getPropiedad() {

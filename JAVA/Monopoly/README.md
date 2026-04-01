@@ -35,7 +35,7 @@ Monopoly/
 │   │   │       │   ├── Lista.java              # Lista enlazada
 │   │   │       │   └── Nodo.java               # Nodo genérico
 │   │   │       ├── service/                    # Servicios (futuro)
-│   │   │       ├── ui/                         # Interfaz gráfica (futuro)
+│   │   │       ├── ui/                         # Interfaz gráfica Swing
 │   │   │       └── util/                       # Utilidades (futuro)
 │   │   └── resources/                          # Recursos del proyecto
 │   └── test/
@@ -52,6 +52,9 @@ Monopoly/
 
 ### `com.monopoly`
 - **Main.java**: Punto de entrada de la aplicación
+
+### `com.monopoly.ui`
+- **MonopolyFrame.java**: Ventana principal con tablero, jugadores y registro
 
 ### `com.monopoly.model`
 - **Jugador.java**: Representa a un jugador con dinero, posición y propiedades
@@ -107,6 +110,12 @@ cd bin
 java com.monopoly.Main
 ```
 
+Si quieres ejecutar la versión en consola:
+```bash
+cd bin
+java com.monopoly.Main consola
+```
+
 ## Flujo del Juego
 
 1. **Crear jugadores** (3 por defecto: Juan, María, Carlos)
@@ -137,7 +146,7 @@ java com.monopoly.Main
 - [ ] Sistema de cárcel avanzado (3 turnos)
 - [ ] Casillas de Oportunidad y Cofre
 - [ ] Construcción de casas y hoteles
-- [ ] Interfaz gráfica (GUI con Swing/JavaFX)
+- [x] Interfaz gráfica básica con Swing
 - [ ] Sistema de guardado/carga
 - [ ] Modo multiplayer en red
 - [ ] Tests unitarios
@@ -161,5 +170,5 @@ Proyecto educativo - Uso libre
 
 ---
 
-**Última actualización:** 29 de marzo de 2026  
+**Última actualización:** 30 de marzo de 2026  
 **Estado del proyecto:** En desarrollo

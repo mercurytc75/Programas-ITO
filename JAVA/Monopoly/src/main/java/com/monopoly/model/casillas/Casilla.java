@@ -11,7 +11,7 @@ public abstract class Casilla {
         this.posicion = posicion;
     }
 
-    public abstract void efecto(Jugador jugador);
+    public abstract String efecto(Jugador jugador);
 
     public String getNombre() {
         return nombre;

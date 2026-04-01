@@ -10,8 +10,8 @@ public class Salida extends Casilla {
     }
 
     @Override
-    public void efecto(Jugador jugador) {
+    public String efecto(Jugador jugador) {
         jugador.recibir(DINERO_SALIDA);
-        System.out.println(jugador.getNombre() + " pasó por Salida y recibió $" + DINERO_SALIDA);
+        return jugador.getNombre() + " pasó por Salida y recibió $" + DINERO_SALIDA;
     }
 }

@@ -1,105 +1,199 @@
 package com.monopoly.model;
 
 import com.monopoly.tda.Cola;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Juego {
     private Cola<Jugador> jugadores;
     private Tablero tablero;
     private boolean juegoActivo;
     private int turnoActual;
+    private Jugador ganador;
+    private String ultimoEvento;
 
     public Juego() {
         jugadores = new Cola<>();
         tablero = new Tablero();
-        juegoActivo = true;
+        juegoActivo = false;
         turnoActual = 0;
+        ganador = null;
+        ultimoEvento = "";
     }
 
     public void agregarJugador(Jugador jugador) {
         jugadores.encolar(jugador);
+        juegoActivo = true;
     }
 
     public void iniciarJuego() {
+        if (contarJugadores() == 0) {
+            ultimoEvento = "No hay jugadores para iniciar la partida.";
+            System.out.println(ultimoEvento);
+            return;
+        }
+
+        juegoActivo = true;
         System.out.println("========== MONOPOLY ==========");
         System.out.println("Iniciando juego con " + contarJugadores() + " jugadores\n");
 
-        while (juegoActivo && contarJugadoresActivos() > 1) {
-            turnoActual++;
-            ejecutarTurno();
+        while (juegoActivo) {
+            String evento = avanzarTurno();
+            if (evento != null && !evento.isBlank()) {
+                System.out.println(evento);
+            }
         }
 
-        finalizarJuego();
+        if (ganador != null) {
+            System.out.println("\n========== FIN DEL JUEGO ==========");
+            System.out.println("¡" + ganador.getNombre() + " gana con $" + ganador.getDinero() + "!");
+        }
     }
 
-    private void ejecutarTurno() {
-        Jugador jugadorActual = jugadores.descolar();
-        System.out.println("\n--- TURNO " + turnoActual + " --- " + jugadorActual.getNombre() + " (Dinero: $" + jugadorActual.getDinero() + ")");
-
-        if (!jugadorActual.estaBancarro()) {
-            // Lanzar dados
-            int dados = tablero.lanzarDados();
-            System.out.println(jugadorActual.getNombre() + " lanzó: " + dados);
-
-            // Mover jugador
-            if (jugadorActual.estaEnCarcel()) {
-                System.out.println(jugadorActual.getNombre() + " está en cárcel. Necesita 3 turnos para salir o pagar $50.");
-                jugadorActual.salirDeCarcel();
-            } else {
-                jugadorActual.mover(dados);
-                System.out.println(jugadorActual.getNombre() + " se movió a la posición " + jugadorActual.getPosicion());
-
-                // Procesar la casilla
-                tablero.procesarCasilla(jugadorActual);
+    public String avanzarTurno() {
+        if (!juegoActivo) {
+            if (ganador != null) {
+                return "La partida ya finalizó. Ganador: " + ganador.getNombre() + " con $" + ganador.getDinero();
             }
-        } else {
-            System.out.println(jugadorActual.getNombre() + " está en bancarrota y es eliminado!");
+
+            return "La partida no ha iniciado.";
         }
 
-        // Volver a encolar si no está en bancarrota
+        if (contarJugadoresActivos() <= 1) {
+            finalizarJuego();
+            return ultimoEvento;
+        }
+
+        Jugador jugadorActual = jugadores.descolar();
+        if (jugadorActual == null) {
+            finalizarJuegoSinGanador("No hay jugadores disponibles para continuar.");
+            return ultimoEvento;
+        }
+
+        turnoActual++;
+        StringBuilder evento = new StringBuilder();
+        evento.append("--- TURNO ").append(turnoActual).append(" --- ")
+                .append(jugadorActual.getNombre())
+                .append(" (Dinero: $").append(jugadorActual.getDinero()).append(")");
+
+        if (!jugadorActual.estaBancarro()) {
+            int dados = tablero.lanzarDados();
+            evento.append("\n").append(jugadorActual.getNombre()).append(" lanzó: ").append(dados);
+
+            if (jugadorActual.estaEnCarcel()) {
+                evento.append("\n").append(jugadorActual.getNombre()).append(" está en cárcel. Pierde este turno y sale de la cárcel.");
+                jugadorActual.salirDeCarcel();
+            } else {
+                int posicionAnterior = jugadorActual.getPosicion();
+                jugadorActual.mover(dados);
+                evento.append("\n").append(jugadorActual.getNombre()).append(" se movió de ")
+                        .append(posicionAnterior).append(" a ").append(jugadorActual.getPosicion());
+
+                String efecto = tablero.procesarCasilla(jugadorActual);
+                if (efecto != null && !efecto.isBlank()) {
+                    evento.append("\n").append(efecto);
+                }
+            }
+        } else {
+            evento.append("\n").append(jugadorActual.getNombre()).append(" está en bancarrota y es eliminado!");
+        }
+
         if (!jugadorActual.estaBancarro()) {
             jugadores.encolar(jugadorActual);
         }
+
+        if (contarJugadoresActivos() <= 1) {
+            finalizarJuego();
+            if (ganador != null) {
+                evento.append("\n").append("Ganador: ").append(ganador.getNombre()).append(" con $").append(ganador.getDinero());
+            }
+        }
+
+        ultimoEvento = evento.toString();
+        return ultimoEvento;
+    }
+
+    public List<Jugador> obtenerJugadores() {
+        List<Jugador> lista = new ArrayList<>();
+        Cola<Jugador> temp = new Cola<>();
+
+        while (!jugadores.estaVacia()) {
+            Jugador jugador = jugadores.descolar();
+            lista.add(jugador);
+            temp.encolar(jugador);
+        }
+
+        while (!temp.estaVacia()) {
+            jugadores.encolar(temp.descolar());
+        }
+
+        return lista;
+    }
+
+    public boolean estaTerminado() {
+        return !juegoActivo;
+    }
+
+    public int getTurnoActual() {
+        return turnoActual;
+    }
+
+    public Jugador getGanador() {
+        return ganador;
+    }
+
+    public String getUltimoEvento() {
+        return ultimoEvento;
+    }
+
+    public Tablero getTablero() {
+        return tablero;
+    }
+
+    public Jugador getJugadorEnTurno() {
+        return jugadores.verFrente();
     }
 
     private int contarJugadores() {
-        Cola<Jugador> temp = new Cola<>();
-        int count = 0;
-
-        while (!jugadores.estaVacia()) {
-            Jugador j = jugadores.descolar();
-            temp.encolar(j);
-            count++;
-        }
-
-        while (!temp.estaVacia()) {
-            jugadores.encolar(temp.descolar());
-        }
-
-        return count;
+        return obtenerJugadores().size();
     }
 
     private int contarJugadoresActivos() {
-        Cola<Jugador> temp = new Cola<>();
         int count = 0;
 
-        while (!jugadores.estaVacia()) {
-            Jugador j = jugadores.descolar();
+        for (Jugador j : obtenerJugadores()) {
             if (!j.estaBancarro()) {
                 count++;
             }
-            temp.encolar(j);
-        }
-
-        while (!temp.estaVacia()) {
-            jugadores.encolar(temp.descolar());
         }
 
         return count;
     }
 
     private void finalizarJuego() {
-        System.out.println("\n========== FIN DEL JUEGO ==========");
-        Jugador ganador = jugadores.descolar();
-        System.out.println("¡" + ganador.getNombre() + " gana con $" + ganador.getDinero() + "!");
+        ganador = buscarGanador();
+        juegoActivo = false;
+
+        if (ganador != null) {
+            ultimoEvento = "La partida terminó. Ganador: " + ganador.getNombre() + " con $" + ganador.getDinero();
+        } else {
+            ultimoEvento = "La partida terminó sin un ganador definido.";
+        }
+    }
+
+    private void finalizarJuegoSinGanador(String mensaje) {
+        ganador = null;
+        juegoActivo = false;
+        ultimoEvento = mensaje;
+    }
+
+    private Jugador buscarGanador() {
+        for (Jugador jugador : obtenerJugadores()) {
+            if (!jugador.estaBancarro()) {
+                return jugador;
+            }
+        }
+
+        return null;
     }
 }

@@ -10,8 +10,8 @@ public class ImpuestoDeLujo extends Casilla {
     }
 
     @Override
-    public void efecto(Jugador jugador) {
+    public String efecto(Jugador jugador) {
         jugador.pagar(MONTO_IMPUESTO);
-        System.out.println(jugador.getNombre() + " pagó Impuesto de Lujo: $" + MONTO_IMPUESTO);
+        return jugador.getNombre() + " pagó Impuesto de Lujo: $" + MONTO_IMPUESTO;
     }
 }

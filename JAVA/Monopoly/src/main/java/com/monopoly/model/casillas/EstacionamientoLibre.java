@@ -8,7 +8,7 @@ public class EstacionamientoLibre extends Casilla {
     }
 
     @Override
-    public void efecto(Jugador jugador) {
-        System.out.println(jugador.getNombre() + " está en Estacionamiento Libre (seguro)");
+    public String efecto(Jugador jugador) {
+        return jugador.getNombre() + " está en Estacionamiento Libre (seguro)";
     }
 }
