@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Jugador;
+import model.casillas.Casilla;
+import model.casillas.PropiedadCasilla;
+import util.DiceRoll;
+import util.DiceUtils;
 
 public class GameEngine {
     private TurnManager turnManager;
@@ -12,6 +16,8 @@ public class GameEngine {
     private int turnoActual;
     private Jugador ganador;
     private String ultimoEvento;
+    private boolean modoAutomatico;
+    private PurchaseDecisionStrategy purchaseDecisionStrategy;
 
     public GameEngine() {
         turnManager = new TurnManager();
@@ -20,6 +26,8 @@ public class GameEngine {
         turnoActual = 0;
         ganador = null;
         ultimoEvento = "";
+        modoAutomatico = true;
+        purchaseDecisionStrategy = (jugador, propiedadCasilla) -> true;
     }
 
     public void agregarJugador(Jugador jugador) {
@@ -72,35 +80,46 @@ public class GameEngine {
         }
 
         turnoActual++;
+        DiceRoll tirada = DiceUtils.lanzarTirada();
+        int dados = tirada.getTotal();
         StringBuilder evento = new StringBuilder();
         evento.append("--- TURNO ").append(turnoActual).append(" --- ")
                 .append(jugadorActual.getNombre())
                 .append(" (Dinero: $").append(jugadorActual.getDinero()).append(")");
+        evento.append("\n").append(jugadorActual.getNombre()).append(" lanzó: ")
+                .append(tirada.getDado1()).append(" + ").append(tirada.getDado2())
+                .append(" = ").append(dados);
 
         if (!jugadorActual.estaBancarro()) {
-            int dados = tablero.lanzarDados();
-            evento.append("\n").append(jugadorActual.getNombre()).append(" lanzó: ").append(dados);
-
             if (jugadorActual.estaEnCarcel()) {
-                evento.append("\n").append(jugadorActual.getNombre()).append(" está en cárcel. Pierde este turno y sale de la cárcel.");
-                jugadorActual.salirDeCarcel();
-            } else {
-                int posicionAnterior = jugadorActual.getPosicion();
-                jugadorActual.mover(dados);
-                evento.append("\n").append(jugadorActual.getNombre()).append(" se movió de ")
-                        .append(posicionAnterior).append(" a ").append(jugadorActual.getPosicion());
+                jugadorActual.incrementarTurnoEnCarcel();
 
-                String efecto = tablero.procesarCasilla(jugadorActual);
-                if (efecto != null && !efecto.isBlank()) {
-                    evento.append("\n").append(efecto);
+                if (tirada.esDoble()) {
+                    jugadorActual.salirDeCarcel();
+                    evento.append("\n").append(jugadorActual.getNombre()).append(" sacó dobles y salió de la cárcel.");
+                    moverYProcesarCasilla(jugadorActual, dados, evento);
+                } else {
+                    evento.append("\n").append(jugadorActual.getNombre()).append(" no sacó dobles y pierde el turno en cárcel.");
+
+                    if (jugadorActual.getTurnosEnCarcel() >= 2) {
+                        jugadorActual.salirDeCarcel();
+                        evento.append("\n").append(jugadorActual.getNombre()).append(" cumple turnos mínimos y sale de la cárcel para el próximo turno.");
+                    }
                 }
+            } else {
+                moverYProcesarCasilla(jugadorActual, dados, evento);
             }
         } else {
             evento.append("\n").append(jugadorActual.getNombre()).append(" está en bancarrota y es eliminado!");
         }
 
         if (!jugadorActual.estaBancarro()) {
-            turnManager.reinsertar(jugadorActual);
+            if (!jugadorActual.estaEnCarcel() && tirada.esDoble()) {
+                turnManager.reinsertarAlFrente(jugadorActual);
+                evento.append("\n").append(jugadorActual.getNombre()).append(" sacó dobles y juega otra vez.");
+            } else {
+                turnManager.reinsertar(jugadorActual);
+            }
         }
 
         if (contarJugadoresActivos() <= 1) {
@@ -140,6 +159,48 @@ public class GameEngine {
 
     public Jugador getJugadorEnTurno() {
         return turnManager.actual();
+    }
+
+    public void setModoAutomatico(boolean modoAutomatico) {
+        this.modoAutomatico = modoAutomatico;
+    }
+
+    public void setPurchaseDecisionStrategy(PurchaseDecisionStrategy purchaseDecisionStrategy) {
+        this.purchaseDecisionStrategy = purchaseDecisionStrategy;
+    }
+
+    private void moverYProcesarCasilla(Jugador jugador, int dados, StringBuilder evento) {
+        int posicionAnterior = jugador.getPosicion();
+        jugador.mover(dados);
+        evento.append("\n").append(jugador.getNombre()).append(" se movió de ")
+                .append(posicionAnterior).append(" a ").append(jugador.getPosicion());
+
+        Casilla casilla = tablero.getCasilla(jugador.getPosicion());
+        boolean comprar = shouldBuyProperty(jugador, casilla);
+        String efecto = tablero.procesarCasilla(jugador, comprar);
+        if (efecto != null && !efecto.isBlank()) {
+            evento.append("\n").append(efecto);
+        }
+    }
+
+    private boolean shouldBuyProperty(Jugador jugador, Casilla casilla) {
+        if (!(casilla instanceof PropiedadCasilla propiedadCasilla)) {
+            return false;
+        }
+
+        if (propiedadCasilla.getPropiedad().tieneDuenio()) {
+            return false;
+        }
+
+        if (modoAutomatico) {
+            return true;
+        }
+
+        if (purchaseDecisionStrategy == null) {
+            return false;
+        }
+
+        return purchaseDecisionStrategy.shouldBuy(jugador, propiedadCasilla);
     }
 
     private int contarJugadores() {

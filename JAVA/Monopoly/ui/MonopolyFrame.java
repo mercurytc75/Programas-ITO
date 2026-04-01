@@ -25,6 +25,7 @@ import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
 import controller.GameController;
@@ -34,6 +35,7 @@ import model.casillas.Casilla;
 import model.casillas.EstacionamientoLibre;
 import model.casillas.ImpuestoDeIngresos;
 import model.casillas.ImpuestoDeLujo;
+import model.casillas.PropiedadCasilla;
 import model.casillas.Salida;
 
 public class MonopolyFrame extends JFrame {
@@ -58,8 +60,11 @@ public class MonopolyFrame extends JFrame {
     private final JLabel ganadorLabel;
     private final JButton siguienteTurnoButton;
     private final JButton reiniciarButton;
+    private final JButton modoAutomaticoButton;
+    private final JButton juegoRealButton;
     private final DefaultListModel<String> jugadoresModel;
     private final JList<String> jugadoresList;
+    private Timer autoTurnTimer;
 
     public MonopolyFrame() {
         super("Monopoly - Interfaz Swing");
@@ -82,6 +87,8 @@ public class MonopolyFrame extends JFrame {
         ganadorLabel = new JLabel("Sin ganador todavía");
         siguienteTurnoButton = new JButton("Siguiente turno");
         reiniciarButton = new JButton("Reiniciar partida");
+        modoAutomaticoButton = new JButton("Modo automático");
+        juegoRealButton = new JButton("Juego real");
         jugadoresModel = new DefaultListModel<>();
         jugadoresList = new JList<>(jugadoresModel);
 
@@ -119,8 +126,28 @@ public class MonopolyFrame extends JFrame {
         reiniciarButton.setForeground(TEXTO_CLARO);
         reiniciarButton.setFocusPainted(false);
 
+        modoAutomaticoButton.setFont(TEXTO);
+        modoAutomaticoButton.setBackground(new Color(76, 150, 245));
+        modoAutomaticoButton.setForeground(Color.BLACK);
+        modoAutomaticoButton.setFocusPainted(false);
+
+        juegoRealButton.setFont(TEXTO);
+        juegoRealButton.setBackground(new Color(96, 115, 140));
+        juegoRealButton.setForeground(TEXTO_CLARO);
+        juegoRealButton.setFocusPainted(false);
+
         siguienteTurnoButton.addActionListener(evento -> ejecutarTurno());
         reiniciarButton.addActionListener(evento -> reiniciarPartida());
+        modoAutomaticoButton.addActionListener(evento -> activarModoAutomatico());
+        juegoRealButton.addActionListener(evento -> activarJuegoReal());
+
+        autoTurnTimer = new Timer(900, evento -> {
+            if (!gameController.estaTerminado()) {
+                ejecutarTurno();
+            } else {
+                autoTurnTimer.stop();
+            }
+        });
     }
 
     private void construirInterfaz() {
@@ -197,10 +224,12 @@ public class MonopolyFrame extends JFrame {
         panel.setBorder(new EmptyBorder(12, 0, 12, 12));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        JPanel botones = new JPanel(new GridLayout(1, 2, 8, 8));
+        JPanel botones = new JPanel(new GridLayout(2, 2, 8, 8));
         botones.setOpaque(false);
         botones.add(siguienteTurnoButton);
         botones.add(reiniciarButton);
+        botones.add(modoAutomaticoButton);
+        botones.add(juegoRealButton);
 
         JPanel jugadoresPanel = new JPanel(new BorderLayout(8, 8));
         jugadoresPanel.setBackground(FONDO_SECUNDARIO);
@@ -322,13 +351,19 @@ public class MonopolyFrame extends JFrame {
         gameController.agregarJugador(new Jugador(1, "Juan"));
         gameController.agregarJugador(new Jugador(2, "María"));
         gameController.agregarJugador(new Jugador(3, "Carlos"));
+        activarJuegoReal();
         registroArea.setText("Partida creada con Juan, María y Carlos.\n");
     }
 
     private void reiniciarPartida() {
+        boolean autoActivo = autoTurnTimer != null && autoTurnTimer.isRunning();
         crearJuegoInicial();
         siguienteTurnoButton.setEnabled(true);
         actualizarInterfaz();
+
+        if (autoActivo) {
+            activarModoAutomatico();
+        }
     }
 
     private void ejecutarTurno() {
@@ -340,6 +375,9 @@ public class MonopolyFrame extends JFrame {
         actualizarInterfaz();
 
         if (gameController.estaTerminado()) {
+            if (autoTurnTimer != null && autoTurnTimer.isRunning()) {
+                autoTurnTimer.stop();
+            }
             siguienteTurnoButton.setEnabled(false);
             if (gameController.getGanador() != null) {
                 JOptionPane.showMessageDialog(this,
@@ -447,6 +485,41 @@ public class MonopolyFrame extends JFrame {
         }
 
         registroArea.setCaretPosition(registroArea.getDocument().getLength());
+    }
+
+    private void activarModoAutomatico() {
+        gameController.setModoAutomatico(true);
+        gameController.setPurchaseDecisionStrategy((jugador, propiedadCasilla) -> true);
+        siguienteTurnoButton.setEnabled(false);
+        if (!autoTurnTimer.isRunning()) {
+            autoTurnTimer.start();
+        }
+        estadoLabel.setText("Modo automático activo");
+    }
+
+    private void activarJuegoReal() {
+        gameController.setModoAutomatico(false);
+        gameController.setPurchaseDecisionStrategy(this::preguntarCompra);
+        if (autoTurnTimer.isRunning()) {
+            autoTurnTimer.stop();
+        }
+        if (!gameController.estaTerminado()) {
+            siguienteTurnoButton.setEnabled(true);
+        }
+        estadoLabel.setText("Juego real activo (compra opcional)");
+    }
+
+    private boolean preguntarCompra(Jugador jugador, PropiedadCasilla propiedadCasilla) {
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                jugador.getNombre() + " cayó en " + propiedadCasilla.getNombre()
+                        + "\nPrecio: $" + propiedadCasilla.getPropiedad().getPrecio()
+                        + "\nDinero actual: $" + jugador.getDinero()
+                        + "\n¿Deseas comprarla?",
+                "Compra de propiedad",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        return opcion == JOptionPane.YES_OPTION;
     }
 
     private static class RendererJugadores implements ListCellRenderer<String> {

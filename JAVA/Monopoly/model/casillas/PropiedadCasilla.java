@@ -13,8 +13,25 @@ public class PropiedadCasilla extends Casilla {
 
     @Override
     public String efecto(Jugador jugador) {
+        return efecto(jugador, false);
+    }
+
+    public String efecto(Jugador jugador, boolean comprarSiDisponible) {
         if (!propiedad.tieneDuenio()) {
-            return jugador.getNombre() + " llegó a " + nombre + " (Precio: $" + propiedad.getPrecio() + ")";
+            if (comprarSiDisponible) {
+                if (jugador.getDinero() >= propiedad.getPrecio()) {
+                    jugador.pagar(propiedad.getPrecio());
+                    propiedad.setDuenio(jugador);
+                    jugador.agregarPropiedad(propiedad);
+                    return jugador.getNombre() + " compró " + nombre + " por $" + propiedad.getPrecio();
+                }
+
+                return jugador.getNombre() + " no tiene dinero suficiente para comprar " + nombre
+                        + " (Precio: $" + propiedad.getPrecio() + ")";
+            }
+
+            return jugador.getNombre() + " llegó a " + nombre + " (Precio: $" + propiedad.getPrecio()
+                    + ") y decidió no comprar";
         }
 
         Jugador duenio = propiedad.getDuenio();

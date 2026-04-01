@@ -25,6 +25,19 @@ public class TurnManager {
         colaTurnos.encolar(jugador);
     }
 
+    public void reinsertarAlFrente(Jugador jugador) {
+        List<Jugador> restantes = new ArrayList<>();
+
+        while (!colaTurnos.estaVacia()) {
+            restantes.add(colaTurnos.descolar());
+        }
+
+        colaTurnos.encolar(jugador);
+        for (Jugador restante : restantes) {
+            colaTurnos.encolar(restante);
+        }
+    }
+
     public Jugador actual() {
         return colaTurnos.verFrente();
     }

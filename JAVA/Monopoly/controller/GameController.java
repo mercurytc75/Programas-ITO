@@ -3,6 +3,7 @@ package controller;
 import java.util.List;
 
 import engine.GameEngine;
+import engine.PurchaseDecisionStrategy;
 import engine.Tablero;
 import model.Jugador;
 
@@ -47,5 +48,13 @@ public class GameController {
 
     public Tablero getTablero() {
         return gameEngine.getTablero();
+    }
+
+    public void setModoAutomatico(boolean modoAutomatico) {
+        gameEngine.setModoAutomatico(modoAutomatico);
+    }
+
+    public void setPurchaseDecisionStrategy(PurchaseDecisionStrategy purchaseDecisionStrategy) {
+        gameEngine.setPurchaseDecisionStrategy(purchaseDecisionStrategy);
     }
 }

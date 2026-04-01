@@ -9,6 +9,7 @@ public class Jugador {
     private int posicion;
     private Lista<Propiedad> propiedades;
     private boolean enCarcel;
+    private int turnosEnCarcel;
 
     public Jugador(int id, String nombre) {
         this.id = id;
@@ -17,6 +18,7 @@ public class Jugador {
         this.posicion = 0; // Posición inicial en el tablero
         this.propiedades = new Lista<>(); // Lista de propiedades del jugador
         this.enCarcel = false; // Estado inicial del jugador
+        this.turnosEnCarcel = 0;
     }
 
     public void mover(int pasos) {
@@ -38,10 +40,20 @@ public class Jugador {
 
     public void encarcelar() {
         enCarcel = true;
+        turnosEnCarcel = 0;
     }
 
     public void salirDeCarcel() {
         enCarcel = false;
+        turnosEnCarcel = 0;
+    }
+
+    public void incrementarTurnoEnCarcel() {
+        turnosEnCarcel++;
+    }
+
+    public int getTurnosEnCarcel() {
+        return turnosEnCarcel;
     }
 
     public boolean estaEnCarcel() {
