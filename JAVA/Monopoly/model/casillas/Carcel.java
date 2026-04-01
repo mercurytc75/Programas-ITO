@@ -1,6 +1,6 @@
-package com.monopoly.model.casillas;
+package model.casillas;
 
-import com.monopoly.model.Jugador;
+import model.Jugador;
 
 public class Carcel extends Casilla {
     public Carcel() {

@@ -1,19 +1,20 @@
-package com.monopoly.model;
+package engine;
 
-import com.monopoly.tda.Cola;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Juego {
-    private Cola<Jugador> jugadores;
+import model.Jugador;
+
+public class GameEngine {
+    private TurnManager turnManager;
     private Tablero tablero;
     private boolean juegoActivo;
     private int turnoActual;
     private Jugador ganador;
     private String ultimoEvento;
 
-    public Juego() {
-        jugadores = new Cola<>();
+    public GameEngine() {
+        turnManager = new TurnManager();
         tablero = new Tablero();
         juegoActivo = false;
         turnoActual = 0;
@@ -22,7 +23,7 @@ public class Juego {
     }
 
     public void agregarJugador(Jugador jugador) {
-        jugadores.encolar(jugador);
+        turnManager.agregar(jugador);
         juegoActivo = true;
     }
 
@@ -64,7 +65,7 @@ public class Juego {
             return ultimoEvento;
         }
 
-        Jugador jugadorActual = jugadores.descolar();
+        Jugador jugadorActual = turnManager.siguiente();
         if (jugadorActual == null) {
             finalizarJuegoSinGanador("No hay jugadores disponibles para continuar.");
             return ultimoEvento;
@@ -99,7 +100,7 @@ public class Juego {
         }
 
         if (!jugadorActual.estaBancarro()) {
-            jugadores.encolar(jugadorActual);
+            turnManager.reinsertar(jugadorActual);
         }
 
         if (contarJugadoresActivos() <= 1) {
@@ -114,20 +115,7 @@ public class Juego {
     }
 
     public List<Jugador> obtenerJugadores() {
-        List<Jugador> lista = new ArrayList<>();
-        Cola<Jugador> temp = new Cola<>();
-
-        while (!jugadores.estaVacia()) {
-            Jugador jugador = jugadores.descolar();
-            lista.add(jugador);
-            temp.encolar(jugador);
-        }
-
-        while (!temp.estaVacia()) {
-            jugadores.encolar(temp.descolar());
-        }
-
-        return lista;
+        return new ArrayList<>(turnManager.obtenerOrdenActual());
     }
 
     public boolean estaTerminado() {
@@ -151,7 +139,7 @@ public class Juego {
     }
 
     public Jugador getJugadorEnTurno() {
-        return jugadores.verFrente();
+        return turnManager.actual();
     }
 
     private int contarJugadores() {

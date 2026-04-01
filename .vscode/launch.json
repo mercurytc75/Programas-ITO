@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Monopoly.Main",
+      "projectName": "Monopoly"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "Monopoly"
+    },
+    {
+      "type": "java",
       "name": "Simulador",
       "request": "launch",
       "mainClass": "Mineria.Simulador",

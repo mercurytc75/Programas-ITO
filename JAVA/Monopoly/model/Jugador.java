@@ -1,6 +1,6 @@
-package com.monopoly.model;
+package model;
 
-import com.monopoly.tda.Lista;
+import tda.Lista;
 
 public class Jugador {
     private int id;

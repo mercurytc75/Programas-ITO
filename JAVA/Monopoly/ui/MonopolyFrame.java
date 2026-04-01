@@ -1,13 +1,5 @@
-package com.monopoly.ui;
+package ui;
 
-import com.monopoly.model.Juego;
-import com.monopoly.model.Jugador;
-import com.monopoly.model.casillas.Carcel;
-import com.monopoly.model.casillas.Casilla;
-import com.monopoly.model.casillas.EstacionamientoLibre;
-import com.monopoly.model.casillas.ImpuestoDeIngresos;
-import com.monopoly.model.casillas.ImpuestoDeLujo;
-import com.monopoly.model.casillas.Salida;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -35,6 +27,15 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import controller.GameController;
+import model.Jugador;
+import model.casillas.Carcel;
+import model.casillas.Casilla;
+import model.casillas.EstacionamientoLibre;
+import model.casillas.ImpuestoDeIngresos;
+import model.casillas.ImpuestoDeLujo;
+import model.casillas.Salida;
+
 public class MonopolyFrame extends JFrame {
     private static final Color FONDO_PRINCIPAL = new Color(16, 24, 40);
     private static final Color FONDO_SECUNDARIO = new Color(27, 39, 58);
@@ -45,7 +46,7 @@ public class MonopolyFrame extends JFrame {
     private static final Font TEXTO = new Font("Segoe UI", Font.PLAIN, 13);
     private static final Font TEXTO_PEQUENO = new Font("Segoe UI", Font.PLAIN, 11);
 
-    private Juego juego;
+    private GameController gameController;
     private final JPanel tableroPanel;
     private final JPanel[] casillaPaneles;
     private final JLabel[] casillaTituloLabels;
@@ -281,7 +282,7 @@ public class MonopolyFrame extends JFrame {
     private void construirTablero() {
         tableroPanel.removeAll();
 
-        for (int posicion = 0; posicion < juego.getTablero().getTotalCasillas(); posicion++) {
+        for (int posicion = 0; posicion < gameController.getTablero().getTotalCasillas(); posicion++) {
             JPanel casilla = new JPanel(new BorderLayout(2, 2));
             casilla.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(45, 56, 74)),
@@ -317,10 +318,10 @@ public class MonopolyFrame extends JFrame {
     }
 
     private void crearJuegoInicial() {
-        juego = new Juego();
-        juego.agregarJugador(new Jugador(1, "Juan"));
-        juego.agregarJugador(new Jugador(2, "María"));
-        juego.agregarJugador(new Jugador(3, "Carlos"));
+        gameController = new GameController();
+        gameController.agregarJugador(new Jugador(1, "Juan"));
+        gameController.agregarJugador(new Jugador(2, "María"));
+        gameController.agregarJugador(new Jugador(3, "Carlos"));
         registroArea.setText("Partida creada con Juan, María y Carlos.\n");
     }
 
@@ -331,18 +332,18 @@ public class MonopolyFrame extends JFrame {
     }
 
     private void ejecutarTurno() {
-        String evento = juego.avanzarTurno();
+        String evento = gameController.avanzarTurno();
         if (evento != null && !evento.isBlank()) {
             appendRegistro(evento);
         }
 
         actualizarInterfaz();
 
-        if (juego.estaTerminado()) {
+        if (gameController.estaTerminado()) {
             siguienteTurnoButton.setEnabled(false);
-            if (juego.getGanador() != null) {
+            if (gameController.getGanador() != null) {
                 JOptionPane.showMessageDialog(this,
-                        "Ganador: " + juego.getGanador().getNombre() + " con $" + juego.getGanador().getDinero(),
+                        "Ganador: " + gameController.getGanador().getNombre() + " con $" + gameController.getGanador().getDinero(),
                         "Partida finalizada",
                         JOptionPane.INFORMATION_MESSAGE);
             }
@@ -353,25 +354,25 @@ public class MonopolyFrame extends JFrame {
         actualizarJugadores();
         actualizarTablero();
 
-        turnoLabel.setText("Turno: " + juego.getTurnoActual());
-        Jugador jugadorEnTurno = juego.getJugadorEnTurno();
+        turnoLabel.setText("Turno: " + gameController.getTurnoActual());
+        Jugador jugadorEnTurno = gameController.getJugadorEnTurno();
         estadoLabel.setText(jugadorEnTurno != null
                 ? "Siguiente jugador: " + jugadorEnTurno.getNombre()
                 : "No hay jugador en turno");
 
-        Jugador ganador = juego.getGanador();
+        Jugador ganador = gameController.getGanador();
         ganadorLabel.setText(ganador != null
                 ? "Ganador: " + ganador.getNombre() + " ($" + ganador.getDinero() + ")"
                 : "Sin ganador todavía");
 
-        if (juego.estaTerminado()) {
+        if (gameController.estaTerminado()) {
             siguienteTurnoButton.setEnabled(false);
         }
     }
 
     private void actualizarJugadores() {
         jugadoresModel.clear();
-        for (Jugador jugador : juego.obtenerJugadores()) {
+        for (Jugador jugador : gameController.obtenerJugadores()) {
             String estado = jugador.estaBancarro()
                     ? "Bancarrota"
                     : jugador.estaEnCarcel() ? "Cárcel" : "Activo";
@@ -387,7 +388,7 @@ public class MonopolyFrame extends JFrame {
 
     private void actualizarTablero() {
         Map<Integer, List<String>> ocupantes = new HashMap<>();
-        for (Jugador jugador : juego.obtenerJugadores()) {
+        for (Jugador jugador : gameController.obtenerJugadores()) {
             if (jugador.estaBancarro()) {
                 continue;
             }
@@ -396,9 +397,9 @@ public class MonopolyFrame extends JFrame {
                     .add(jugador.getNombre());
         }
 
-        for (int posicion = 0; posicion < juego.getTablero().getTotalCasillas(); posicion++) {
-            Casilla casilla = juego.getTablero().getCasilla(posicion);
-            String nombreCasilla = casilla != null ? casilla.getNombre() : juego.getTablero().getNombreCasilla(posicion);
+        for (int posicion = 0; posicion < gameController.getTablero().getTotalCasillas(); posicion++) {
+            Casilla casilla = gameController.getTablero().getCasilla(posicion);
+            String nombreCasilla = casilla != null ? casilla.getNombre() : gameController.getTablero().getNombreCasilla(posicion);
             String detalle = ocupantes.containsKey(posicion)
                     ? String.join(", ", ocupantes.get(posicion))
                     : "";

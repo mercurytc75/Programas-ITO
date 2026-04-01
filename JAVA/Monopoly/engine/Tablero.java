@@ -1,16 +1,15 @@
-package com.monopoly.model;
+package engine;
 
-import com.monopoly.model.casillas.*;
-import java.util.Random;
+import model.casillas.*;
+import model.Jugador;
+import util.DiceUtils;
 
 public class Tablero {
     private Casilla[] casillas;
     public static final int TOTAL_CASILLAS = 40;
-    private Random dado;
 
     public Tablero() {
         casillas = new Casilla[TOTAL_CASILLAS];
-        dado = new Random();
         inicializarTablero();
     }
 
@@ -32,7 +31,7 @@ public class Tablero {
     }
 
     public int lanzarDados() {
-        return dado.nextInt(6) + 1 + dado.nextInt(6) + 1; // Suma de dos dados (2-12)
+        return DiceUtils.lanzarDosDados();
     }
 
     public Casilla getCasilla(int posicion) {

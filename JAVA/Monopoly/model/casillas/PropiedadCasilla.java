@@ -1,7 +1,7 @@
-package com.monopoly.model.casillas;
+package model.casillas;
 
-import com.monopoly.model.Jugador;
-import com.monopoly.model.Propiedad;
+import model.Jugador;
+import model.Propiedad;
 
 public class PropiedadCasilla extends Casilla {
     private Propiedad propiedad;

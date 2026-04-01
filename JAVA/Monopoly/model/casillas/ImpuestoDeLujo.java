@@ -1,6 +1,6 @@
-package com.monopoly.model.casillas;
+package model.casillas;
 
-import com.monopoly.model.Jugador;
+import model.Jugador;
 
 public class ImpuestoDeLujo extends Casilla {
     private static final int MONTO_IMPUESTO = 75;
