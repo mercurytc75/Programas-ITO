@@ -28,6 +28,6 @@ public class Mineral {
     
     @Override
     public String toString() {
-        return "Mineral{" + tipo + ", " + peso + "kg}";
+        return String.format("mineral{%s, %.2fkg}", tipo, peso);
     }
 }

@@ -63,7 +63,7 @@ public class VentanaSimulador extends JFrame {
 
         // Estado
         lblEstado = new JLabel("Estado: Inactivo");
-        lblEstado.setBounds(420, 40, 300, 25);
+        lblEstado.setBounds(530, 40, 300, 25);
         lblEstado.setFont(new Font("Arial", Font.PLAIN, 12));
         add(lblEstado);
 
@@ -99,7 +99,7 @@ public class VentanaSimulador extends JFrame {
         lblBodegaLbl.setFont(new Font("Arial", Font.PLAIN, 11));
         add(lblBodegaLbl);
 
-        lblBodega = new JLabel("0 / 500");
+        lblBodega = new JLabel("0 / 500clacl");
         lblBodega.setBounds(530, 165, 300, 20);
         add(lblBodega);
 
@@ -135,7 +135,7 @@ public class VentanaSimulador extends JFrame {
     private void eventos() {
         btnIniciar.addActionListener(e -> iniciarSimulacion());
         btnDetener.addActionListener(e -> detenerSimulacion());
-        btnReiniciar.addActionListener(e -> reiniciarSumilador());
+        btnReiniciar.addActionListener(e -> reiniciarSimulador());
     }
 
     private void iniciarSimulacion() {
@@ -170,7 +170,7 @@ public class VentanaSimulador extends JFrame {
             mostrarError("Ingresa un número válido de robots");
         }
     }
-    private  void reiniciarSumilador() {
+    private  void reiniciarSimulador() {
         if (simulacionEnCurso) {
             detenerSimulacion();
         }

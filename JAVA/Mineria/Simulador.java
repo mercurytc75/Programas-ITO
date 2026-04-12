@@ -76,19 +76,28 @@ public class Simulador {
                     finalizarSimulacion("La bodega alcanzó su capacidad máxima de 5000 minerales");
                     break;
                 }
-                
-                System.out.println("\n ========== ESTADÍSTICAS ACTUALES ==========");
-                System.out.println("Fundidora - Mineral refinado: " + fundidora.getMineralRefinado() + 
-                                 " | Ciclos: " + fundidora.getCiclosCompletados());
-                System.out.println("Bodega - Almacenado: " + bodega.getCantidadAlmacenada() + 
-                                 " | Disponible: " + bodega.getEspacioDisponible() + "/" + bodega.getCapacidadMaxima());
-                
-                System.out.println("\nRobots activos: " + contarRobotsActivos());
+
+                int refinado = fundidora.getMineralRefinado();
+                int ciclos = fundidora.getCiclosCompletados();
+                int almacenado = bodega.getCantidadAlmacenada();
+                int disponibles = bodega.getEspacioDisponible();
+                int capacidad = bodega.getCapacidadMaxima();
+
+               
+                System.out.println("\n╔════════════════ ESTADO DEL SISTEMA ════════════════╗");
+                System.out.printf("║ Fundidora  | Refiunado:  %-6d | Ciclos: %-4d     ║%n", refinado, ciclos);
+                System.out.printf("║ Bodega     | Almacenado : %-6d | libre: %-4d/%-4d║%n", almacenado, disponibles, capacidad);
+                System.out.println("╠════════════════ ROBOTS ACTIVOS ════════════════════╣");
+                System.out.printf("║ Total activos: %-3d                                 ║%n", contarRobotsActivos());
+
                 for (Robot robot : robots) {
-                    System.out.println("  Robot #" + robot.getRobotId() + " - Recolectado: " + 
-                                     robot.getTotalMineralRecolectado() + " | Activo: " + robot.isActivo());
-                }
-                System.out.println("=".repeat(45) + "\n");
+                System.out.printf("║ Robot #%02d │ Recolectado: %-6d │ Activo: %-5s     ║%n",
+                        robot.getRobotId(),
+                        robot.getTotalMineralRecolectado(),
+                        robot.isActivo());
+            }
+
+            System.out.println("╚════════════════════════════════════════════════════╝\n");
                 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
@@ -106,7 +115,7 @@ public class Simulador {
         }
 
         simulacionActiva = false;
-        System.out.println("\n⛔ Finalizando simulación: " + motivo);
+        System.out.println("\n Finalizando simulación: " + motivo);
 
         for (Robot robot : robots) {
             robot.detener();
@@ -142,7 +151,7 @@ public class Simulador {
         Map<String, Integer> clasificacion = bodega.getMineralesClasificados();
 
         System.out.println("\n" + "=".repeat(60));
-        System.out.println("📈 ESTADÍSTICAS FINALES");
+        System.out.println(" ESTADÍSTICAS FINALES");
         System.out.println("=".repeat(60));
         System.out.println("Total mineral refinado: " + totalRefinado);
         System.out.println("Ciclos completados: " + fundidora.getCiclosCompletados());

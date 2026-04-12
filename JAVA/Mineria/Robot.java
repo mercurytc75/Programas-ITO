@@ -51,7 +51,8 @@ public class Robot extends Thread {
                     mineralRecolectado.add(m);
                 }
                 
-                System.out.printf("Robot #%d recolectó %d minerales: %s%n", id, cantidadMinerales, mineralRecolectado);
+                System.out.printf("Robot #%d recolectó %d minerales: %n", id, cantidadMinerales);
+                mineralRecolectado.forEach(m -> System.out.println("   - " + m));
                 totalMineralRecolectado += cantidadMinerales;
                 
                 // Transportar a la fundidora y luego almacenar en bodega
@@ -105,7 +106,7 @@ public class Robot extends Thread {
     public int getRobotId() {
         return id;
     }
-    public long getBodega(){
+    public int getBodega(){
         return bodega.getEspacioDisponible();
     }
     public boolean isActivo() {
