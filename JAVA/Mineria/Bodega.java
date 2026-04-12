@@ -84,4 +84,5 @@ public class Bodega {
     public synchronized Map<String, Integer> getMineralesClasificados() {
         return new LinkedHashMap<>(mineralesClasificados);
     }
+    
 }

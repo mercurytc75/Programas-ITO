@@ -5,6 +5,20 @@
       "type": "java",
       "name": "Main",
       "request": "launch",
+      "mainClass": "Main",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "VentanaSimulador",
+      "request": "launch",
+      "mainClass": "VentanaSimulador",
+      "projectName": ""
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
       "mainClass": "Monopoly.Main",
       "projectName": "Monopoly"
     },

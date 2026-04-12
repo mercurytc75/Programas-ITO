@@ -3,7 +3,6 @@ package Mineria;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * Clase Simulador: orquestador principal de la minería
@@ -17,6 +16,7 @@ public class Simulador {
     private int cantidadRobots;
     private boolean resumenMostrado;
     
+   
     public Simulador(int cantidadRobots) {
         this.cantidadRobots = cantidadRobots;
         this.robots = new ArrayList<>();
@@ -77,7 +77,7 @@ public class Simulador {
                     break;
                 }
                 
-                System.out.println("\n📊 ========== ESTADÍSTICAS ACTUALES ==========");
+                System.out.println("\n ========== ESTADÍSTICAS ACTUALES ==========");
                 System.out.println("Fundidora - Mineral refinado: " + fundidora.getMineralRefinado() + 
                                  " | Ciclos: " + fundidora.getCiclosCompletados());
                 System.out.println("Bodega - Almacenado: " + bodega.getCantidadAlmacenada() + 
@@ -163,56 +163,15 @@ public class Simulador {
             System.out.println("  Robot #" + robot.getRobotId() + ": " + robot.getTotalMineralRecolectado() + " minerales");
         }
         System.out.println("=".repeat(60) + "\n");
+    } 
+    public Fundidora getFundidora(){
+        return fundidora;
     }
-    
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        
-        System.out.print("¿Cuántos robots deseas? (1-10): ");
-        int cantidadRobots = scanner.nextInt();
-        
-        if (cantidadRobots < 1 || cantidadRobots > 10) {
-            cantidadRobots = 3;
-            System.out.println("⚠️ Valor inválido. Usando 3 robots por defecto.");
-        }
-        
-        Simulador simulador = new Simulador(cantidadRobots);
-        
-        System.out.println("\n📋 MENÚ DE CONTROL:");
-        System.out.println("1 - Iniciar simulación");
-        System.out.println("2 - Detener simulación");
-        System.out.println("3 - Salir");
-        
-        boolean ejecutando = true;
-        while (ejecutando) {
-            System.out.print("\nOpción: ");
-            int opcion = scanner.nextInt();
-            
-            switch (opcion) {
-                case 1:
-                    simulador.iniciar();
-                    System.out.print("¿Cuántos segundos ejecutar? ");
-                    int segundos = scanner.nextInt();
-                    try {
-                        Thread.sleep(segundos * 1000L);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
-                    simulador.detener();
-                    break;
-                case 2:
-                    simulador.detener();
-                    break;
-                case 3:
-                    ejecutando = false;
-                    simulador.detener();
-                    System.out.println("👋 ¡Hasta luego!");
-                    break;
-                default:
-                    System.out.println("❌ Opción no válida");
-            }
-        }
-        
-        scanner.close();
+    public Bodega getBodega(){
+        return bodega;
     }
+    public int getRobotsActivos(){
+        return (int) robots.stream().filter(Robot::isActivo).count();
+    }
+
 }
