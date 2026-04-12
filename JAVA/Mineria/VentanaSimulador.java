@@ -19,6 +19,11 @@ public class VentanaSimulador extends JFrame {
     private boolean simulacionEnCurso;
     private static final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 
+    /**
+     * pues creo que esto ya se la sananas para que cobijas
+     * nos saltamos esto
+     */
+
     public VentanaSimulador() {
         setTitle("Simulador de Minería - Control");
         setSize(850, 600);
@@ -131,7 +136,10 @@ public class VentanaSimulador extends JFrame {
 
         eventos();
     }
-
+    /**
+     * damos comienso a los enventos en nuestro caso
+     * solo a los botones de iniciar, deterner, reiniciar
+     */
     private void eventos() {
         btnIniciar.addActionListener(e -> iniciarSimulacion());
         btnDetener.addActionListener(e -> detenerSimulacion());

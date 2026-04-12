@@ -8,6 +8,11 @@ import javax.swing.SwingUtilities;
  */
 public class Main {
     public static void main(String[] args) {
+
+        /**
+         * damos inicio  a nuestro programa parece que ya no tiene erorres y pues vemos 
+         * mas adelante :v
+         */
         SwingUtilities.invokeLater(() -> {
             VentanaSimulador ventana = new VentanaSimulador();
             ventana.setLocationRelativeTo(null);
