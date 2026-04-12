@@ -163,6 +163,7 @@ public class Simulador {
             System.out.println("  Robot #" + robot.getRobotId() + ": " + robot.getTotalMineralRecolectado() + " minerales");
         }
         System.out.println("=".repeat(60) + "\n");
+        finalizarSimulacion("Simulación completada");
     } 
     public Fundidora getFundidora(){
         return fundidora;

@@ -8,7 +8,7 @@ import java.util.Date;
 public class VentanaSimulador extends JFrame {
 
     private JTextField txtRobots;
-    private JButton btnIniciar, btnDetener;
+    private JButton btnIniciar, btnDetener, btnReiniciar;
     private JTextArea txtLog;
     private JLabel lblRefinado, lblBodega, lblRobots, lblEstado;
     private JProgressBar progresoBodega;
@@ -54,6 +54,12 @@ public class VentanaSimulador extends JFrame {
         btnDetener.setForeground(Color.WHITE);
         btnDetener.setEnabled(false);
         add(btnDetener);
+
+        btnReiniciar = new JButton("🔄 Reiniciar");
+        btnReiniciar.setBounds(420, 40, 100, 25);
+        btnReiniciar.setBackground(new Color(50, 50, 200));
+        btnReiniciar.setForeground(Color.WHITE);
+        add(btnReiniciar);
 
         // Estado
         lblEstado = new JLabel("Estado: Inactivo");
@@ -116,7 +122,7 @@ public class VentanaSimulador extends JFrame {
         // Info adicional
         JLabel lblInfo = new JLabel("<html><b>Información:</b><br>" +
                 "• Robots recolectan minerales<br>" +
-                "• Bodega almacena hasta 500<br>" +
+                "• Bodega almacena hasta 50<br>" +
                 "• Fundidora refina los minerales<br>" +
                 "• Simulación automática</html>");
         lblInfo.setBounds(530, 270, 300, 120);
@@ -129,6 +135,7 @@ public class VentanaSimulador extends JFrame {
     private void eventos() {
         btnIniciar.addActionListener(e -> iniciarSimulacion());
         btnDetener.addActionListener(e -> detenerSimulacion());
+        btnReiniciar.addActionListener(e -> reiniciarSumilador());
     }
 
     private void iniciarSimulacion() {
@@ -152,7 +159,7 @@ public class VentanaSimulador extends JFrame {
             // Thread para ejecutar la simulación
             threadSimulacion = new Thread(() -> {
                 simulador.iniciar();
-                finalizarSimulacion("Simulación completada");
+                
             });
             threadSimulacion.start();
 
@@ -163,12 +170,23 @@ public class VentanaSimulador extends JFrame {
             mostrarError("Ingresa un número válido de robots");
         }
     }
+    private  void reiniciarSumilador() {
+        if (simulacionEnCurso) {
+            detenerSimulacion();
+        }
+        iniciarSimulacion();
+    }
 
     private void detenerSimulacion() {
-        if (simulador != null) {
+        if (simulacionEnCurso && simulador != null) {
             simulador.detener();
-            log("Simulación detenida manualmente");
-            finalizarSimulacion("Detenido por el usuario");
+            if (threadSimulacion != null && threadSimulacion.isAlive()) {
+                threadSimulacion.interrupt();
+            }
+            if (threadActualizacion != null && threadActualizacion.isAlive()) {
+                threadActualizacion.interrupt();
+            }
+            finalizarSimulacion("Simulación detenida");
         }
     }
 

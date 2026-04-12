@@ -16,7 +16,7 @@ public class Bodega {
     private Map<String, Integer> mineralesClasificados;
     
     public Bodega() {
-        this.capacidadMaxima = 500;  // Capacidad por defecto
+        this.capacidadMaxima = 50;  // Capacidad por defecto
         this.espacioDisponible = capacidadMaxima;
         this.mineralesAlmacenados = new ArrayList<>();
         this.mineralesClasificados = new LinkedHashMap<>();
