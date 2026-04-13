@@ -1,4 +1,4 @@
-package tda;
+package Monopoly;
 
 public class Nodo<T> {
     private T dato;

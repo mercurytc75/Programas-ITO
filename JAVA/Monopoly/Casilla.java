@@ -1,6 +1,4 @@
-package model.casillas;
-
-import model.Jugador;
+package Monopoly;
 
 public abstract class Casilla {
     protected String nombre;

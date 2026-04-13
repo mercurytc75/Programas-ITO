@@ -1,10 +1,15 @@
-package tda;
+package Monopoly;
 
 public class Lista<T> {
+
     private Nodo<T> cabeza;
+    private Nodo<T> cola;
+    private int tamanio;
 
     public Lista() {
         cabeza = null;
+        cola = null;
+        tamanio = 0;
     }
 
     public boolean estaVacia() {
@@ -12,39 +17,42 @@ public class Lista<T> {
     }
 
     public void agregar(T dato) {
-        Nodo<T> nuevo = new Nodo<T>(dato);
+        Nodo<T> nuevo = new Nodo<>(dato);
+
         if (estaVacia()) {
             cabeza = nuevo;
+            cola = nuevo;
         } else {
-            Nodo<T> actual = cabeza;
-            while (actual.getSiguiente() != null) {
-                actual = actual.getSiguiente();
-            }
-            actual.setSiguiente(nuevo);
+            cola.setSiguiente(nuevo);
+            cola = nuevo;
         }
+
+        tamanio++;
     }
 
     public T obtener(int indice) {
+        if (indice < 0 || indice >= tamanio) {
+            return null;
+        }
+
         Nodo<T> actual = cabeza;
         int contador = 0;
 
-        while (actual != null && contador < indice) {
+        while (contador < indice) {
             actual = actual.getSiguiente();
             contador++;
         }
 
-        return actual != null ? actual.getDato() : null;
+        return actual.getDato();
     }
 
     public int tamanio() {
-        Nodo<T> actual = cabeza;
-        int contador = 0;
+        return tamanio;
+    }
 
-        while (actual != null) {
-            contador++;
-            actual = actual.getSiguiente();
-        }
-
-        return contador;
+    public void limpiar() {
+        cabeza = null;
+        cola = null;
+        tamanio = 0;
     }
 }

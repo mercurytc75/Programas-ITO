@@ -1,7 +1,6 @@
 package Monopoly;
 
 
-import ui.MonopolyFrame;
 
 import javax.swing.SwingUtilities;
 

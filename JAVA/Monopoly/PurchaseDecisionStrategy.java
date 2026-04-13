@@ -1,7 +1,4 @@
-package engine;
-
-import model.Jugador;
-import model.casillas.PropiedadCasilla;
+package Monopoly;
 
 @FunctionalInterface
 public interface PurchaseDecisionStrategy {

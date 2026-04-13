@@ -1,6 +1,4 @@
-package model.casillas;
-
-import model.Jugador;
+package Monopoly;
 
 public class Salida extends Casilla {
     private static final int DINERO_SALIDA = 200;

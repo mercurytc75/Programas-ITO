@@ -1,4 +1,4 @@
-package util;
+package Monopoly;
 
 public class DiceRoll {
     private final int dado1;

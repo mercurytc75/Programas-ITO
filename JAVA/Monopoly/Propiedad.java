@@ -1,4 +1,4 @@
-package model;
+package Monopoly;
 
 public class Propiedad {
     private String nombre;

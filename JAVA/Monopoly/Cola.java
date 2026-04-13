@@ -1,4 +1,4 @@
-package tda;
+package Monopoly;
 
 public class Cola<T> {
     private Nodo<T> frente;

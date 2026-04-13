@@ -1,10 +1,7 @@
-package engine;
-
-import model.casillas.*;
-import model.Jugador;
-import util.DiceUtils;
+package Monopoly;
 
 public class Tablero {
+
     private Casilla[] casillas;
     public static final int TOTAL_CASILLAS = 40;
 
@@ -16,11 +13,11 @@ public class Tablero {
     private void inicializarTablero() {
         // Casillas especiales
         casillas[0] = new Salida();
-        casillas[4] = new ImpuestoDeIngresos();
+        casillas[4] = new Impuesto("Impuesto de Ingresos", 4, 200);
         casillas[10] = new Carcel();
         casillas[20] = new EstacionamientoLibre();
         casillas[30] = new Carcel(); // Vaya a la Carcel
-        casillas[38] = new ImpuestoDeLujo();
+        casillas[38] = new Impuesto("Impuesto de Lujo", 38, 75);
 
         inicializarPropiedadesMonopoly();
 
@@ -29,7 +26,12 @@ public class Tablero {
             if (casillas[i] == null) {
                 int precio = 100 + (i % 10) * 20;
                 int renta = Math.max(10, precio / 10);
-                casillas[i] = new PropiedadCasilla("Lote " + i, i, precio, renta);
+                casillas[i] = new PropiedadCasilla(
+                    "Lote " + i,
+                    i,
+                    precio,
+                    renta
+                );
             }
         }
     }
@@ -66,7 +68,7 @@ public class Tablero {
     }
 
     public int lanzarDados() {
-        return DiceUtils.lanzarDosDados();
+        return DiceUtils.lanzarTirada().getTotal();
     }
 
     public Casilla getCasilla(int posicion) {
@@ -89,7 +91,11 @@ public class Tablero {
             return casilla.efecto(jugador);
         }
 
-        return jugador.getNombre() + " está en una propiedad sin dueño en la posición " + posicion;
+        return (
+            jugador.getNombre() +
+            " está en una propiedad sin dueño en la posición " +
+            posicion
+        );
     }
 
     public int getTotalCasillas() {
@@ -106,9 +112,19 @@ public class Tablero {
         return "Propiedad";
     }
 
-    public void crearPropiedad(int posicion, String nombre, int precio, int renta) {
+    public void crearPropiedad(
+        int posicion,
+        String nombre,
+        int precio,
+        int renta
+    ) {
         if (casillas[posicion] == null) {
-            casillas[posicion] = new PropiedadCasilla(nombre, posicion, precio, renta);
+            casillas[posicion] = new PropiedadCasilla(
+                nombre,
+                posicion,
+                precio,
+                renta
+            );
         }
     }
 }

@@ -1,4 +1,4 @@
-package ui;
+package Monopoly;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,17 +28,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-import controller.GameController;
-import model.Jugador;
-import model.casillas.Carcel;
-import model.casillas.Casilla;
-import model.casillas.EstacionamientoLibre;
-import model.casillas.ImpuestoDeIngresos;
-import model.casillas.ImpuestoDeLujo;
-import model.casillas.PropiedadCasilla;
-import model.casillas.Salida;
-
 public class MonopolyFrame extends JFrame {
+
     private static final Color FONDO_PRINCIPAL = new Color(16, 24, 40);
     private static final Color FONDO_SECUNDARIO = new Color(27, 39, 58);
     private static final Color TEXTO_CLARO = new Color(245, 247, 250);
@@ -46,9 +37,13 @@ public class MonopolyFrame extends JFrame {
     private static final Font TITULO = new Font("Segoe UI", Font.BOLD, 28);
     private static final Font SUBTITULO = new Font("Segoe UI", Font.PLAIN, 14);
     private static final Font TEXTO = new Font("Segoe UI", Font.PLAIN, 13);
-    private static final Font TEXTO_PEQUENO = new Font("Segoe UI", Font.PLAIN, 11);
+    private static final Font TEXTO_PEQUENO = new Font(
+        "Segoe UI",
+        Font.PLAIN,
+        11
+    );
 
-    private GameController gameController;
+    private GameEngine gameController;
     private final JPanel tableroPanel;
     private final JPanel[] casillaPaneles;
     private final JLabel[] casillaTituloLabels;
@@ -138,7 +133,9 @@ public class MonopolyFrame extends JFrame {
 
         siguienteTurnoButton.addActionListener(evento -> ejecutarTurno());
         reiniciarButton.addActionListener(evento -> reiniciarPartida());
-        modoAutomaticoButton.addActionListener(evento -> activarModoAutomatico());
+        modoAutomaticoButton.addActionListener(evento ->
+            activarModoAutomatico()
+        );
         juegoRealButton.addActionListener(evento -> activarJuegoReal());
 
         autoTurnTimer = new Timer(900, evento -> {
@@ -169,7 +166,9 @@ public class MonopolyFrame extends JFrame {
         titulo.setFont(TITULO);
         titulo.setForeground(ACENTO);
 
-        JLabel subtitulo = new JLabel("Tablero interactivo en Swing con turnos, registro y estado de jugadores");
+        JLabel subtitulo = new JLabel(
+            "Tablero interactivo en Swing con turnos, registro y estado de jugadores"
+        );
         subtitulo.setFont(SUBTITULO);
         subtitulo.setForeground(TEXTO_CLARO);
 
@@ -210,8 +209,12 @@ public class MonopolyFrame extends JFrame {
         JScrollPane scrollTablero = new JScrollPane(tableroPanel);
         scrollTablero.setBorder(BorderFactory.createEmptyBorder());
         scrollTablero.getViewport().setBackground(FONDO_PRINCIPAL);
-        scrollTablero.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollTablero.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollTablero.setHorizontalScrollBarPolicy(
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        scrollTablero.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
 
         panel.add(scrollTablero, BorderLayout.CENTER);
         return panel;
@@ -233,9 +236,12 @@ public class MonopolyFrame extends JFrame {
 
         JPanel jugadoresPanel = new JPanel(new BorderLayout(8, 8));
         jugadoresPanel.setBackground(FONDO_SECUNDARIO);
-        jugadoresPanel.setBorder(BorderFactory.createCompoundBorder(
+        jugadoresPanel.setBorder(
+            BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(54, 68, 90)),
-                new EmptyBorder(12, 12, 12, 12)));
+                new EmptyBorder(12, 12, 12, 12)
+            )
+        );
 
         JLabel titulo = new JLabel("Jugadores");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -260,16 +266,21 @@ public class MonopolyFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(FONDO_SECUNDARIO);
-        panel.setBorder(BorderFactory.createCompoundBorder(
+        panel.setBorder(
+            BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(54, 68, 90)),
-                new EmptyBorder(12, 12, 12, 12)));
+                new EmptyBorder(12, 12, 12, 12)
+            )
+        );
 
         JLabel titulo = new JLabel("Reglas rápidas");
         titulo.setFont(new Font("Segoe UI", Font.BOLD, 18));
         titulo.setForeground(ACENTO);
 
         JLabel linea1 = new JLabel("• Cada turno tira dos dados.");
-        JLabel linea2 = new JLabel("• Las casillas especiales aplican su efecto.");
+        JLabel linea2 = new JLabel(
+            "• Las casillas especiales aplican su efecto."
+        );
         JLabel linea3 = new JLabel("• Reinicia la partida cuando quieras.");
 
         for (JLabel etiqueta : List.of(titulo, linea1, linea2, linea3)) {
@@ -299,10 +310,14 @@ public class MonopolyFrame extends JFrame {
         panel.add(encabezado, BorderLayout.NORTH);
 
         JScrollPane scrollRegistro = new JScrollPane(registroArea);
-        scrollRegistro.setBorder(BorderFactory.createLineBorder(new Color(54, 68, 90)));
+        scrollRegistro.setBorder(
+            BorderFactory.createLineBorder(new Color(54, 68, 90))
+        );
         scrollRegistro.setPreferredSize(new Dimension(0, 230));
         scrollRegistro.setMinimumSize(new Dimension(0, 180));
-        scrollRegistro.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollRegistro.setVerticalScrollBarPolicy(
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
         panel.add(scrollRegistro, BorderLayout.CENTER);
 
         return panel;
@@ -311,14 +326,24 @@ public class MonopolyFrame extends JFrame {
     private void construirTablero() {
         tableroPanel.removeAll();
 
-        for (int posicion = 0; posicion < gameController.getTablero().getTotalCasillas(); posicion++) {
+        for (
+            int posicion = 0;
+            posicion < gameController.getTablero().getTotalCasillas();
+            posicion++
+        ) {
             JPanel casilla = new JPanel(new BorderLayout(2, 2));
-            casilla.setBorder(BorderFactory.createCompoundBorder(
+            casilla.setBorder(
+                BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(45, 56, 74)),
-                    new EmptyBorder(6, 6, 6, 6)));
+                    new EmptyBorder(6, 6, 6, 6)
+                )
+            );
             casilla.setOpaque(true);
 
-            JLabel posicionLabel = new JLabel("#" + posicion, SwingConstants.CENTER);
+            JLabel posicionLabel = new JLabel(
+                "#" + posicion,
+                SwingConstants.CENTER
+            );
             posicionLabel.setFont(TEXTO_PEQUENO);
             posicionLabel.setForeground(Color.DARK_GRAY);
 
@@ -347,7 +372,7 @@ public class MonopolyFrame extends JFrame {
     }
 
     private void crearJuegoInicial() {
-        gameController = new GameController();
+        gameController = new GameEngine();
         gameController.agregarJugador(new Jugador(1, "Juan"));
         gameController.agregarJugador(new Jugador(2, "María"));
         gameController.agregarJugador(new Jugador(3, "Carlos"));
@@ -380,10 +405,15 @@ public class MonopolyFrame extends JFrame {
             }
             siguienteTurnoButton.setEnabled(false);
             if (gameController.getGanador() != null) {
-                JOptionPane.showMessageDialog(this,
-                        "Ganador: " + gameController.getGanador().getNombre() + " con $" + gameController.getGanador().getDinero(),
-                        "Partida finalizada",
-                        JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Ganador: " +
+                        gameController.getGanador().getNombre() +
+                        " con $" +
+                        gameController.getGanador().getDinero(),
+                    "Partida finalizada",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
             }
         }
     }
@@ -394,14 +424,22 @@ public class MonopolyFrame extends JFrame {
 
         turnoLabel.setText("Turno: " + gameController.getTurnoActual());
         Jugador jugadorEnTurno = gameController.getJugadorEnTurno();
-        estadoLabel.setText(jugadorEnTurno != null
+        estadoLabel.setText(
+            jugadorEnTurno != null
                 ? "Siguiente jugador: " + jugadorEnTurno.getNombre()
-                : "No hay jugador en turno");
+                : "No hay jugador en turno"
+        );
 
         Jugador ganador = gameController.getGanador();
-        ganadorLabel.setText(ganador != null
-                ? "Ganador: " + ganador.getNombre() + " ($" + ganador.getDinero() + ")"
-                : "Sin ganador todavía");
+        ganadorLabel.setText(
+            ganador != null
+                ? "Ganador: " +
+                  ganador.getNombre() +
+                  " ($" +
+                  ganador.getDinero() +
+                  ")"
+                : "Sin ganador todavía"
+        );
 
         if (gameController.estaTerminado()) {
             siguienteTurnoButton.setEnabled(false);
@@ -412,15 +450,22 @@ public class MonopolyFrame extends JFrame {
         jugadoresModel.clear();
         for (Jugador jugador : gameController.obtenerJugadores()) {
             String estado = jugador.estaBancarro()
-                    ? "Bancarrota"
-                    : jugador.estaEnCarcel() ? "Cárcel" : "Activo";
+                ? "Bancarrota"
+                : jugador.estaEnCarcel()
+                    ? "Cárcel"
+                    : "Activo";
 
             jugadoresModel.addElement(
-                    jugador.getNombre()
-                            + " | $" + jugador.getDinero()
-                            + " | Pos: " + jugador.getPosicion()
-                            + " | Prop: " + jugador.getPropiedades().tamanio()
-                            + " | " + estado);
+                jugador.getNombre() +
+                    " | $" +
+                    jugador.getDinero() +
+                    " | Pos: " +
+                    jugador.getPosicion() +
+                    " | Prop: " +
+                    jugador.getPropiedades().tamanio() +
+                    " | " +
+                    estado
+            );
         }
     }
 
@@ -431,20 +476,32 @@ public class MonopolyFrame extends JFrame {
                 continue;
             }
 
-            ocupantes.computeIfAbsent(jugador.getPosicion(), posicion -> new ArrayList<>())
-                    .add(jugador.getNombre());
+            ocupantes
+                .computeIfAbsent(jugador.getPosicion(), posicion ->
+                    new ArrayList<>()
+                )
+                .add(jugador.getNombre());
         }
 
-        for (int posicion = 0; posicion < gameController.getTablero().getTotalCasillas(); posicion++) {
+        for (
+            int posicion = 0;
+            posicion < gameController.getTablero().getTotalCasillas();
+            posicion++
+        ) {
             Casilla casilla = gameController.getTablero().getCasilla(posicion);
-            String nombreCasilla = casilla != null ? casilla.getNombre() : gameController.getTablero().getNombreCasilla(posicion);
+            String nombreCasilla =
+                casilla != null
+                    ? casilla.getNombre()
+                    : gameController.getTablero().getNombreCasilla(posicion);
             String detalle = ocupantes.containsKey(posicion)
-                    ? String.join(", ", ocupantes.get(posicion))
-                    : "";
+                ? String.join(", ", ocupantes.get(posicion))
+                : "";
 
             casillaPaneles[posicion].setBackground(colorCasilla(casilla));
             casillaTituloLabels[posicion].setText(nombreCasilla);
-            casillaDetalleLabels[posicion].setText(detalle.isBlank() ? "" : "Jugadores: " + detalle);
+            casillaDetalleLabels[posicion].setText(
+                detalle.isBlank() ? "" : "Jugadores: " + detalle
+            );
             casillaPosicionLabels[posicion].setText("#" + posicion);
         }
     }
@@ -462,12 +519,8 @@ public class MonopolyFrame extends JFrame {
             return new Color(233, 115, 115);
         }
 
-        if (casilla instanceof ImpuestoDeIngresos) {
+        if (casilla instanceof Impuesto) {
             return new Color(241, 196, 103);
-        }
-
-        if (casilla instanceof ImpuestoDeLujo) {
-            return new Color(249, 175, 92);
         }
 
         if (casilla instanceof EstacionamientoLibre) {
@@ -489,7 +542,9 @@ public class MonopolyFrame extends JFrame {
 
     private void activarModoAutomatico() {
         gameController.setModoAutomatico(true);
-        gameController.setPurchaseDecisionStrategy((jugador, propiedadCasilla) -> true);
+        gameController.setPurchaseDecisionStrategy(
+            (jugador, propiedadCasilla) -> true
+        );
         siguienteTurnoButton.setEnabled(false);
         if (!autoTurnTimer.isRunning()) {
             autoTurnTimer.start();
@@ -509,22 +564,37 @@ public class MonopolyFrame extends JFrame {
         estadoLabel.setText("Juego real activo (compra opcional)");
     }
 
-    private boolean preguntarCompra(Jugador jugador, PropiedadCasilla propiedadCasilla) {
+    private boolean preguntarCompra(
+        Jugador jugador,
+        PropiedadCasilla propiedadCasilla
+    ) {
         int opcion = JOptionPane.showConfirmDialog(
-                this,
-                jugador.getNombre() + " cayó en " + propiedadCasilla.getNombre()
-                        + "\nPrecio: $" + propiedadCasilla.getPropiedad().getPrecio()
-                        + "\nDinero actual: $" + jugador.getDinero()
-                        + "\n¿Deseas comprarla?",
-                "Compra de propiedad",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+            this,
+            jugador.getNombre() +
+                " cayó en " +
+                propiedadCasilla.getNombre() +
+                "\nPrecio: $" +
+                propiedadCasilla.getPropiedad().getPrecio() +
+                "\nDinero actual: $" +
+                jugador.getDinero() +
+                "\n¿Deseas comprarla?",
+            "Compra de propiedad",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
         return opcion == JOptionPane.YES_OPTION;
     }
 
     private static class RendererJugadores implements ListCellRenderer<String> {
+
         @Override
-        public Component getListCellRendererComponent(JList<? extends String> lista, String valor, int indice, boolean seleccionado, boolean foco) {
+        public Component getListCellRendererComponent(
+            JList<? extends String> lista,
+            String valor,
+            int indice,
+            boolean seleccionado,
+            boolean foco
+        ) {
             JLabel etiqueta = new JLabel(valor);
             etiqueta.setOpaque(true);
             etiqueta.setFont(TEXTO);

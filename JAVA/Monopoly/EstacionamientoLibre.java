@@ -1,6 +1,4 @@
-package model.casillas;
-
-import model.Jugador;
+package Monopoly;
 
 public class EstacionamientoLibre extends Casilla {
     public EstacionamientoLibre() {

@@ -1,10 +1,7 @@
-package engine;
+package Monopoly;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import model.Jugador;
-import tda.Cola;
 
 public class TurnManager {
     private final Cola<Jugador> colaTurnos;
