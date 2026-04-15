@@ -84,12 +84,16 @@ public class PanelRobots extends JPanel {
 
     public void actualizar() {
         List<Robot> robots = gameEngine.getRobots();
+        Integer seleccionada = (Integer) comboRobot.getSelectedItem();
         comboRobot.removeAllItems();
         StringBuilder texto = new StringBuilder();
         for (Robot robot : robots) {
             comboRobot.addItem(robot.getRobotId());
             texto.append(String.format("#%d | Nivel %d | Energia %d%% | Zona %s | %s\n",
                     robot.getRobotId(), robot.getNivel(), robot.getEnergia(), robot.getZonaAsignada(), robot.getEstado()));
+        }
+        if (seleccionada != null) {
+            comboRobot.setSelectedItem(seleccionada);
         }
         areaRobots.setText(texto.length() == 0 ? "No hay robots disponibles.\n" : texto.toString());
         revalidate();

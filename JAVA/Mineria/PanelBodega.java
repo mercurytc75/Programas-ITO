@@ -11,6 +11,7 @@ public class PanelBodega extends JPanel {
     private final Consumer<String> logger;
     private final JProgressBar barraBodega;
     private final JLabel lblInfo;
+    private boolean compradorEspecialPrevio = false;
 
     public PanelBodega(GameEngine gameEngine, Consumer<String> logger) {
         this.gameEngine = gameEngine;
@@ -47,6 +48,14 @@ public class PanelBodega extends JPanel {
     }
 
     public void actualizar() {
+        boolean compradorActivo = gameEngine.getBodega().isCompradorEspecialActivo();
+        if (compradorActivo && !compradorEspecialPrevio) {
+            logger.accept("🚛 ¡COMPRADOR ESPECIAL! Precios x2 durante 10 segundos.");
+        } else if (!compradorActivo && compradorEspecialPrevio) {
+            logger.accept("El comprador especial se ha ido.");
+        }
+        compradorEspecialPrevio = compradorActivo;
+
         int cantidad = gameEngine.getBodega().getCantidadAlmacenada();
         int capacidad = gameEngine.getBodega().getCapacidadMaxima();
         barraBodega.setMaximum(Math.max(1, capacidad));

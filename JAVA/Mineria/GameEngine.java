@@ -182,6 +182,8 @@ public class GameEngine {
                 break;
             }
             System.out.printf("[NOTICIA] RONDA %d FINALIZADA%n", r);
+            // Condición de derrota: sin dinero, O sin robots activos
+            // y tampoco alcanza para comprar el robot más barato
             if (
                 dinero <= 0 ||
                 (contarRobotsActivos() == 0 && dinero < PRECIO_ROBOT_NIVEL_1)
@@ -288,10 +290,13 @@ public class GameEngine {
         }
     }
 
+    private static final int PRECIO_ENFRIAR_FUNDIDORA = 300;
+
     public synchronized void enfriarFundidora() {
         // FASE 2: Usar el nuevo método enfriar() que maneja el dinero en Fundidora
-        if (fundidora.enfriar(dinero)) {
-            dinero -= Fundidora.COSTO_ENFRIAR;
+        if (dinero >= PRECIO_ENFRIAR_FUNDIDORA) {
+            fundidora.enfriar(dinero);
+            dinero -= PRECIO_ENFRIAR_FUNDIDORA;
             System.out.printf(
                 "[OK] Fundidora enfriada. Dinero restante: $%d%n",
                 dinero
@@ -299,7 +304,7 @@ public class GameEngine {
         } else {
             System.out.println(
                 "[ALERTA] Dinero insuficiente para enfriar fundidora (costo: $" +
-                    Fundidora.COSTO_ENFRIAR +
+                    PRECIO_ENFRIAR_FUNDIDORA +
                     ")"
             );
         }
@@ -320,13 +325,19 @@ public class GameEngine {
         return ingresoTotal;
     }
 
+    // Se ejecuta en su propio hilo. Cada 5 segundos revisa si algún contrato
+    // aceptado ya tiene suficientes minerales en bodega para completarse,
+    // o si alguno venció su tiempo límite (penalización).
     private void bucleEvaluacionContratos() {
         while (juegoActivo) {
             try {
                 Thread.sleep(5000);
                 if (!juegoActivo) break;
+                // delta es positivo si se ganó dinero (contrato cumplido)
+                // o negativo si se aplicó una penalización (contrato vencido)
                 int delta = gestorContratos.evaluarContratos(dinero);
                 if (delta != 0) {
+                    // synchronized porque 'dinero' también lo modifican otros métodos
                     synchronized (this) {
                         dinero += delta;
                     }
@@ -426,6 +437,8 @@ public class GameEngine {
         }
     }
 
+    // Cuenta cuántos robots están vivos (hilo corriendo) Y en estado ACTIVO.
+    // Un robot puede estar vivo pero SIN_ENERGIA o ROTO, esos no cuentan.
     private int contarRobotsActivos() {
         return (int) robots
             .stream()
@@ -433,6 +446,9 @@ public class GameEngine {
             .count();
     }
 
+    // synchronized para que solo un hilo pueda finalizar el juego a la vez.
+    // resumenMostrado evita que se imprima el resumen más de una vez
+    // en caso de que 'manejarRondas' y otra condición de derrota se disparen juntos.
     private synchronized void finalizarJuego(String resultado, String motivo) {
         if (resumenMostrado || !juegoActivo) return;
         juegoActivo = false;
@@ -497,15 +513,38 @@ public class GameEngine {
     }
     
     public void reanudarJuego() {
+        if (juegoActivo) {
+            System.out.println("[GameEngine] El juego ya está en curso.");
+            return;
+        }
         juegoActivo = true;
-        gestorEventos.reanudar();
-        gestorContratos.reanudar();
+
+        // Cuando se detiene el juego, los hilos de los robots se matan con interrupt().
+        // Un hilo Java que terminó no puede reiniciarse con start() de nuevo.
+        // Por eso creamos un Robot nuevo con los mismos datos (id, nivel, zona)
+        // y lo sustituimos en la lista antes de arrancarlo.
         for (Robot robot : robots) {
             robot.reanudar();
+            if (!robot.isAlive()) {
+                Robot nuevo = new Robot(robot.getRobotId(), robot.getNivel(), fundidora, bodega, robot.getZona() != null ? robot.getZona() : zonas.get(0));
+                robots.set(robots.indexOf(robot), nuevo);
+                nuevo.start();
+            }
         }
-        if (threadRondas != null) threadRondas.interrupt();
-        if (threadEstadisticas != null) threadEstadisticas.interrupt();
-        if (threadContratos != null) threadContratos.interrupt();
+
+        // Reiniciar gestor de eventos si ya no está activo
+        if (!gestorEventos.isActivo()) {
+            gestorEventos.iniciar();
+        }
+
+        // Relanzar threads internos
+        threadRondas = new Thread(this::manejarRondas, "Rondas");
+        threadRondas.start();
+        threadEstadisticas = new Thread(this::mostrarEstadisticas, "Estadisticas");
+        threadEstadisticas.start();
+        threadContratos = new Thread(this::bucleEvaluacionContratos, "EvaluadorContratos");
+        threadContratos.start();
+
         System.out.println("[GameEngine] Juego reanudado completamente.");
     }
 

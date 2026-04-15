@@ -126,10 +126,12 @@ public class VentanaJuego extends JFrame {
         estilizarBoton(btnTienda, new Color(127, 140, 141));
         estilizarBoton(btnDetener, new Color(192, 57, 43));
         estilizarBoton(btnSalir, new Color(44, 62, 80));
+        estilizarBoton(btnReanudar, new Color(39, 174, 96));
 
         acciones.add(btnIniciar);
         acciones.add(btnTienda);
         acciones.add(btnDetener);
+        acciones.add(btnReanudar);
         acciones.add(btnSalir);
 
         contenedor.add(barra, BorderLayout.CENTER);
@@ -185,7 +187,7 @@ public class VentanaJuego extends JFrame {
     }
     
     private void reanudarJuego() {
-        gameEngine.reanudar();
+        gameEngine.reanudarJuego();
         juegoIniciado = true;
         agregarLog("Partida reanudada.");
     }

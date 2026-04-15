@@ -11,6 +11,7 @@ public class PanelMapa extends JPanel {
     private final GameEngine gameEngine;
     private final Map<String, JLabel> labelsReserva = new HashMap<>();
     private final Map<String, JLabel> labelsRobots = new HashMap<>();
+    private final Map<String, JProgressBar> barras = new HashMap<>();
 
     public PanelMapa(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -60,6 +61,7 @@ public class PanelMapa extends JPanel {
 
         labelsReserva.put(nombre, reserva);
         labelsRobots.put(nombre, robots);
+        barras.put(nombre, barra);
         card.add(titulo, BorderLayout.NORTH);
         card.add(info, BorderLayout.CENTER);
         return card;
@@ -77,6 +79,12 @@ public class PanelMapa extends JPanel {
             etiquetaReserva.setText("Reserva: " + zona.getReserva() + "/" + zona.getReservaMaxima() + " (" + zona.getPorcentajeReserva() + "%)" + (zona.isBloqueada() ? " - BLOQUEADA" : ""));
             long conteo = robots.stream().filter(r -> zona.getNombre().equals(r.getZonaAsignada())).count();
             etiquetaRobots.setText("Robots asignados: " + conteo);
+            JProgressBar barra = barras.get(zona.getNombre());
+            if (barra != null) {
+                int pct = zona.getPorcentajeReserva();
+                barra.setValue(pct);
+                barra.setString(pct + "%");
+            }
         }
         revalidate();
         repaint();

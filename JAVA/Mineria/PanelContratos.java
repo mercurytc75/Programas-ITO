@@ -68,6 +68,7 @@ public class PanelContratos extends JPanel {
 
     public void actualizar() {
         List<Contrato> contratos = gameEngine.getContratosActivos();
+        int indiceSeleccionado = lista.getSelectedIndex();
         modelo.clear();
         for (Contrato contrato : contratos) {
             modelo.addElement(String.format("#%d | %s | %s | Recompensa $%d",
@@ -75,6 +76,9 @@ public class PanelContratos extends JPanel {
         }
         if (modelo.isEmpty()) {
             modelo.addElement("No hay contratos activos.");
+        }
+        if (indiceSeleccionado >= 0 && indiceSeleccionado < modelo.size()) {
+            lista.setSelectedIndex(indiceSeleccionado);
         }
         revalidate();
         repaint();

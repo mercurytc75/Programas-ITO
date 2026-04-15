@@ -95,6 +95,12 @@ public class Bodega {
             .start();
     }
 
+
+
+    
+
+
+
     /**
      * Intenta almacenar minerales en la bodega
      * @param minerales Minerales a almacenar

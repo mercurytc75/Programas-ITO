@@ -66,13 +66,15 @@ public class Robot extends Thread {
         
         while (activo) {
             try {
-                // Verificar estado
+                // Si está sin energía, el robot no puede hacer nada hasta que
+                // el jugador presione "Recargar" (cuesta $50)
                 if (estado == Estado.SIN_ENERGIA) {
                     System.out.printf("Robot #%d está SIN ENERGÍA - esperando recarga%n", id);
                     Thread.sleep(1000);
                     continue;
                 }
                 
+                // Si está roto, tampoco puede minar hasta que el jugador presione "Reparar" ($200)
                 if (estado == Estado.ROTO || estado == Estado.EN_REPARACION) {
                     System.out.printf("Robot #%d está ROTO/EN REPARACIÓN%n", id);
                     Thread.sleep(2000);
@@ -118,7 +120,7 @@ public class Robot extends Thread {
                 System.out.printf("Robot #%d recolectó %d minerales (Energía: %d%%)%n", id, cantidadMinerales, energia);
                 totalMineralRecolectado += cantidadMinerales;
                 
-                // Restar energía según cantidad recolectada y zona
+                // La Zona C (Diamante) es la más exigente: consume 5 de energía extra por ciclo
                 int desgaste = cantidadMinerales + (zona != null && zona.getNombre().equals("C") ? 5 : 0);
                 energia -= desgaste;
                 
@@ -136,6 +138,8 @@ public class Robot extends Thread {
                 Thread.sleep(500);
                 
             } catch (InterruptedException e) {
+                // interrupt() se llama desde GameEngine.detener() para matar el hilo.
+                // Después de interrumpir, restauramos la bandera y salimos del bucle.
                 System.out.printf("Robot #%d fue interrumpido%n", id);
                 Thread.currentThread().interrupt();
                 break;
@@ -166,6 +170,10 @@ public class Robot extends Thread {
     
     public void detener() {
         activo = false;
+    }
+
+    public void reanudar() {
+        activo = true;
     }
     
     // Getters y Setters para nuevas propiedades

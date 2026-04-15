@@ -148,6 +148,9 @@ public class GestorContratos {
         }
     }
 
+
+    
+
     /**
      * Evalúa si el jugador ha completado contratos aceptados
      * con los minerales disponibles en la bodega
@@ -158,7 +161,11 @@ public class GestorContratos {
         int dineroPerdido = 0;
         List<Contrato> aRemover = new ArrayList<>();
 
+        // Iteramos sobre una copia de la lista para poder modificar la original
+        // dentro del mismo bucle sin lanzar ConcurrentModificationException
         for (Contrato contrato : new ArrayList<>(contratosActivos)) {
+            // Solo los contratos ACEPTADOS generan penalización al vencerse.
+            // Si el jugador nunca lo aceptó, simplemente se descarta sin costo.
             if (contrato.isVencido()) {
                 if (contrato.isAceptado()) {
                     dineroPerdido += contrato.getPenalizacion();
@@ -178,6 +185,8 @@ public class GestorContratos {
             }
 
             if (contrato.isAceptado() && !contrato.isCompletado()) {
+                // Consultamos la bodega para ver cuántos minerales del tipo
+                // requerido hay disponibles en ese momento
                 Map<String, Integer> minerales =
                     bodega.getMineralesClasificados();
                 int disponible = minerales.getOrDefault(

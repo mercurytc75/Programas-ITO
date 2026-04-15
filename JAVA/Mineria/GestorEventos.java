@@ -230,6 +230,11 @@ public class GestorEventos {
         System.out.println("[GestorEventos] Sistema de eventos detenido");
     }
 
+    public void reanudar() {
+        activo = true;
+        System.out.println("[GestorEventos] Sistema de eventos reanudado");
+    }
+
     public boolean isActivo() {
         return activo;
     }
