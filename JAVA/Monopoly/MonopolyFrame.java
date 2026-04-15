@@ -83,7 +83,7 @@ public class MonopolyFrame extends JFrame {
         siguienteTurnoButton = new JButton("Siguiente turno");
         reiniciarButton = new JButton("Reiniciar partida");
         modoAutomaticoButton = new JButton("Modo automático");
-        juegoRealButton = new JButton("Juego real");
+        juegoRealButton = new JButton("Jugar");
         jugadoresModel = new DefaultListModel<>();
         jugadoresList = new JList<>(jugadoresModel);
 
