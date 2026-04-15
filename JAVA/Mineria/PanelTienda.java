@@ -1,17 +1,22 @@
 package Mineria;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class PanelTienda extends JDialog {
+
     private final GameEngine gameEngine;
     private final Consumer<String> logger;
     private final JLabel lblDinero;
     private final JLabel lblEstado;
 
-    public PanelTienda(Frame owner, GameEngine gameEngine, Consumer<String> logger) {
+    public PanelTienda(
+        Frame owner,
+        GameEngine gameEngine,
+        Consumer<String> logger
+    ) {
         super(owner, "Tienda", true);
         this.gameEngine = gameEngine;
         this.logger = logger;
@@ -26,7 +31,7 @@ public class PanelTienda extends JDialog {
         titulo.setForeground(Color.WHITE);
         add(titulo, BorderLayout.NORTH);
 
-        JPanel centro = new JPanel(new GridLayout(5, 1, 10, 10));
+        JPanel centro = new JPanel(new GridLayout(6, 1, 10, 10));
         centro.setBorder(new EmptyBorder(12, 12, 12, 12));
         centro.setOpaque(false);
 
@@ -79,7 +84,9 @@ public class PanelTienda extends JDialog {
 
     private void mejorarFundidora() {
         boolean ok = gameEngine.getTienda().mejorarFundidora();
-        lblEstado.setText(ok ? "Fundidora mejorada." : "No se pudo mejorar la fundidora.");
+        lblEstado.setText(
+            ok ? "Fundidora mejorada." : "No se pudo mejorar la fundidora."
+        );
         if (ok) {
             logger.accept("Fundidora mejorada desde la tienda.");
         }
@@ -88,7 +95,9 @@ public class PanelTienda extends JDialog {
 
     private void mejorarBodega() {
         boolean ok = gameEngine.getTienda().mejorarBodega();
-        lblEstado.setText(ok ? "Bodega mejorada." : "No se pudo mejorar la bodega.");
+        lblEstado.setText(
+            ok ? "Bodega mejorada." : "No se pudo mejorar la bodega."
+        );
         if (ok) {
             logger.accept("Bodega mejorada desde la tienda.");
         }

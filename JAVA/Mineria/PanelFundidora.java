@@ -1,11 +1,12 @@
 package Mineria;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class PanelFundidora extends JPanel {
+
     private final GameEngine gameEngine;
     private final Consumer<String> logger;
     private final JProgressBar barraCalor;
@@ -33,7 +34,7 @@ public class PanelFundidora extends JPanel {
         JButton btnEnfriar = new JButton("Enfriar");
         btnEnfriar.addActionListener(e -> {
             gameEngine.enfriarFundidora();
-            logger.accept("Se solicitó enfriamiento de la fundidora.");
+            this.logger.accept("Se solicitó enfriamiento de la fundidora.");
             actualizar();
         });
 

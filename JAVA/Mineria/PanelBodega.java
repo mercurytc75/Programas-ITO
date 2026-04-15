@@ -1,11 +1,12 @@
 package Mineria;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class PanelBodega extends JPanel {
+
     private final GameEngine gameEngine;
     private final Consumer<String> logger;
     private final JProgressBar barraBodega;
@@ -33,7 +34,7 @@ public class PanelBodega extends JPanel {
         JButton btnVender = new JButton("Vender ahora");
         btnVender.addActionListener(e -> {
             int ganancia = gameEngine.venderMinerales();
-            logger.accept("Venta realizada por $" + ganancia + ".");
+            this.logger.accept("Venta realizada por $" + ganancia + ".");
             actualizar();
         });
 
@@ -51,6 +52,14 @@ public class PanelBodega extends JPanel {
         barraBodega.setMaximum(Math.max(1, capacidad));
         barraBodega.setValue(cantidad);
         barraBodega.setString(cantidad + "/" + capacidad);
-        lblInfo.setText("Capacidad: " + cantidad + "/" + capacidad + (gameEngine.getBodega().isCompradorEspecialActivo() ? " - comprador especial activo" : ""));
+        lblInfo.setText(
+            "Capacidad: " +
+                cantidad +
+                "/" +
+                capacidad +
+                (gameEngine.getBodega().isCompradorEspecialActivo()
+                    ? " - comprador especial activo"
+                    : "")
+        );
     }
 }

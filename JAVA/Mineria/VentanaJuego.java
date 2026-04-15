@@ -114,11 +114,13 @@ public class VentanaJuego extends JFrame {
         JButton btnTienda = new JButton("Tienda");
         JButton btnDetener = new JButton("Detener");
         JButton btnSalir = new JButton("Salir");
+        JButton btnReanudar = new JButton("Reanudar");
 
         btnIniciar.addActionListener(this::iniciarJuego);
         btnTienda.addActionListener(e -> abrirTienda());
         btnDetener.addActionListener(e -> detenerJuego());
         btnSalir.addActionListener(e -> dispose());
+        btnReanudar.addActionListener(e -> reanudarJuego());
 
         estilizarBoton(btnIniciar, new Color(41, 128, 185));
         estilizarBoton(btnTienda, new Color(127, 140, 141));
@@ -180,6 +182,12 @@ public class VentanaJuego extends JFrame {
         gameEngine.detener();
         juegoIniciado = false;
         agregarLog("Partida detenida manualmente.");
+    }
+    
+    private void reanudarJuego() {
+        gameEngine.reanudar();
+        juegoIniciado = true;
+        agregarLog("Partida reanudada.");
     }
 
     private void abrirTienda() {
