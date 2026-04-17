@@ -139,7 +139,7 @@ public class Fundidora {
     private void activarSobrecalentamiento() {
         sobrecalentada = true;
         System.out.println(
-            "⚠️  [FUNDIDORA] ¡¡¡SOBRECALENTAMIENTO!!! Pausada por 15 segundos"
+            "[FUNDIDORA] ¡¡¡SOBRECALENTAMIENTO!!! Pausada por 15 segundos"
         );
 
         new Thread(() -> {
@@ -167,7 +167,7 @@ public class Fundidora {
     public synchronized boolean enfriar(int dineroDisponible) {
         if (dineroDisponible < COSTO_ENFRIAR) {
             System.out.printf(
-                "❌ [FUNDIDORA] Dinero insuficiente para enfriar. Falta: $%d%n",
+                "[FUNDIDORA] Dinero insuficiente para enfriar. Falta: $%d%n",
                 COSTO_ENFRIAR - dineroDisponible
             );
             return false;
@@ -175,7 +175,7 @@ public class Fundidora {
 
         nivelCalor = Math.max(0, nivelCalor - DESCENSO_ENFRIAR);
         System.out.printf(
-            "❄️  [FUNDIDORA] Enfriada manualmente. Nuevo nivel: %d%% (costo: -$%d)%n",
+            "[FUNDIDORA] Enfriada manualmente. Nuevo nivel: %d%% (costo: -$%d)%n",
             nivelCalor,
             COSTO_ENFRIAR
         );

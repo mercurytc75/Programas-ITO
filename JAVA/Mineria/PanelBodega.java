@@ -11,7 +11,7 @@ public class PanelBodega extends JPanel {
     private final Consumer<String> logger;
     private final JProgressBar barraBodega;
     private final JLabel lblInfo;
-    private boolean compradorEspecialPrevio = false;
+1    private boolean compradorEspecialPrevio = false;
 
     public PanelBodega(GameEngine gameEngine, Consumer<String> logger) {
         this.gameEngine = gameEngine;

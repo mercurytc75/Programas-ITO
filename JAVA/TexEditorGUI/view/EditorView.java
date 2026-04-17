@@ -247,7 +247,7 @@ public class EditorView extends JFrame{
             textArea.append(String.format("%3d │ %s\n", i, lineas.get(i)));
         }
 
-        String estadoEditor = lineas.isEmpty() ? "▪ Vacío" : "▸ Activo";
+        String estadoEditor = lineas.isEmpty() ? "Vacio" : "Activo";
         statusBar.setText(String.format(" %s | Total líneas: %d | Documento actualizado", 
             estadoEditor, lineas.size()));
     }
@@ -262,7 +262,7 @@ public class EditorView extends JFrame{
             if (result == JFileChooser.APPROVE_OPTION) {
                 archivoActual = fileChooser.getSelectedFile();
             } else {
-                statusBar.setText(" ✗ Guardado cancelado");
+                statusBar.setText(" Guardado cancelado");
                 return;
             }
         }
@@ -272,7 +272,7 @@ public class EditorView extends JFrame{
             for (String linea : lineas) {
                 writer.write(linea + "\n");
             }
-            statusBar.setText(" ✓ Archivo guardado: " + archivoActual.getName());
+            statusBar.setText(" Archivo guardado: " + archivoActual.getName());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), 
                 "Error", JOptionPane.ERROR_MESSAGE);
@@ -302,7 +302,7 @@ public class EditorView extends JFrame{
                 }
                 
                 actualizarTexto();
-                statusBar.setText(" ✓ Archivo abierto: " + archivoActual.getName());
+                statusBar.setText(" Archivo abierto: " + archivoActual.getName());
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al abrir: " + ex.getMessage(), 
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -319,7 +319,7 @@ public class EditorView extends JFrame{
             controller.getDocumento().getLineas().clear();
             archivoActual = null;
             actualizarTexto();
-            statusBar.setText(" ✓ Nuevo documento creado");
+            statusBar.setText(" Nuevo documento creado");
         }
     }
 
@@ -329,9 +329,9 @@ public class EditorView extends JFrame{
         if (selectedText != null) {
             java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new java.awt.datatransfer.StringSelection(selectedText), null);
-            statusBar.setText(" ✓ Texto cortado");
+            statusBar.setText(" Texto cortado");
         } else {
-            statusBar.setText(" ✗ No hay texto seleccionado");
+            statusBar.setText(" No hay texto seleccionado");
         }
     }
 
@@ -340,9 +340,9 @@ public class EditorView extends JFrame{
         if (selectedText != null) {
             java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new java.awt.datatransfer.StringSelection(selectedText), null);
-            statusBar.setText(" ✓ Texto copiado");
+            statusBar.setText(" Texto copiado");
         } else {
-            statusBar.setText(" ✗ No hay texto seleccionado");
+            statusBar.setText(" No hay texto seleccionado");
         }
     }
 
@@ -355,10 +355,10 @@ public class EditorView extends JFrame{
                 int index = Integer.parseInt(input);
                 controller.getDocumento().getLineas().add(index, clipboard);
                 actualizarTexto();
-                statusBar.setText(" ✓ Texto pegado");
+                statusBar.setText(" Texto pegado");
             }
         } catch (Exception ex) {
-            statusBar.setText(" ✗ Error al pegar");
+            statusBar.setText(" Error al pegar");
         }
     }
 
@@ -374,7 +374,7 @@ public class EditorView extends JFrame{
                 }
             }
             
-            statusBar.setText(String.format(" 🔍 Encontradas %d coincidencias", encontradas));
+            statusBar.setText(String.format(" Encontradas %d coincidencias", encontradas));
             if (encontradas == 0) {
                 JOptionPane.showMessageDialog(this, "No se encontraron resultados");
             }
@@ -384,9 +384,9 @@ public class EditorView extends JFrame{
     // ============== MÉTODOS DE VISUALIZACIÓN ==============
     private void mostrarEspacios(boolean mostrar) {
         if (mostrar) {
-            statusBar.setText(" ⦾ Mostrando espacios en blanco");
+            statusBar.setText(" Mostrando espacios en blanco");
         } else {
-            statusBar.setText(" ⦾ Espacios ocultos");
+            statusBar.setText(" Espacios ocultos");
             actualizarTexto();
         }
     }

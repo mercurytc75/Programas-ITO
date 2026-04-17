@@ -218,14 +218,14 @@ public class EditorView2 extends JFrame {
             if (result == JFileChooser.APPROVE_OPTION) {
                 archivoActual = fileChooser.getSelectedFile();
             } else {
-                statusBar.setText(" ✗ Guardado cancelado");
+                statusBar.setText(" Guardado cancelado");
                 return;
             }
         }
         
         try (FileWriter writer = new FileWriter(archivoActual)) {
             writer.write(textArea.getText());
-            statusBar.setText(" ✓ Archivo guardado: " + archivoActual.getName());
+            statusBar.setText(" Archivo guardado: " + archivoActual.getName());
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Error al guardar: " + ex.getMessage(), 
                 "Error", JOptionPane.ERROR_MESSAGE);
@@ -249,7 +249,7 @@ public class EditorView2 extends JFrame {
                 textArea.setText(contenido.toString());
                 undoManager.discardAllEdits();
                 actualizarTexto();
-                statusBar.setText(" ✓ Archivo abierto: " + archivoActual.getName());
+                statusBar.setText(" Archivo abierto: " + archivoActual.getName());
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error al abrir: " + ex.getMessage(), 
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -266,7 +266,7 @@ public class EditorView2 extends JFrame {
             textArea.setText("");
             undoManager.discardAllEdits();
             archivoActual = null;
-            statusBar.setText(" ✓ Nuevo documento creado");
+            statusBar.setText(" Nuevo documento creado");
         }
     }
 
@@ -276,9 +276,9 @@ public class EditorView2 extends JFrame {
         if (selectedText != null) {
             java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new java.awt.datatransfer.StringSelection(selectedText), null);
-            statusBar.setText(" ✓ Texto cortado");
+            statusBar.setText(" Texto cortado");
         } else {
-            statusBar.setText(" ✗ No hay texto seleccionado");
+            statusBar.setText(" No hay texto seleccionado");
         }
     }
 
@@ -287,9 +287,9 @@ public class EditorView2 extends JFrame {
         if (selectedText != null) {
             java.awt.Toolkit.getDefaultToolkit().getSystemClipboard()
                 .setContents(new java.awt.datatransfer.StringSelection(selectedText), null);
-            statusBar.setText(" ✓ Texto copiado");
+            statusBar.setText(" Texto copiado");
         } else {
-            statusBar.setText(" ✗ No hay texto seleccionado");
+            statusBar.setText(" No hay texto seleccionado");
         }
     }
 
@@ -300,9 +300,9 @@ public class EditorView2 extends JFrame {
             
             int caretPos = textArea.getCaretPosition();
             textArea.insert(clipboard, caretPos);
-            statusBar.setText(" ✓ Texto pegado");
+            statusBar.setText(" Texto pegado");
         } catch (Exception ex) {
-            statusBar.setText(" ✗ Error al pegar");
+            statusBar.setText(" Error al pegar");
         }
     }
 
@@ -318,7 +318,7 @@ public class EditorView2 extends JFrame {
                 index += buscar.length();
             }
             
-            statusBar.setText(String.format(" 🔍 Encontradas %d coincidencias", encontradas));
+            statusBar.setText(String.format(" Encontradas %d coincidencias", encontradas));
             if (encontradas == 0) {
                 JOptionPane.showMessageDialog(this, "No se encontraron resultados");
             }
@@ -328,9 +328,9 @@ public class EditorView2 extends JFrame {
     // ============== MÉTODOS DE VISUALIZACIÓN ==============
     private void mostrarEspacios(boolean mostrar) {
         if (mostrar) {
-            statusBar.setText(" ⦾ Mostrando espacios en blanco");
+            statusBar.setText(" Mostrando espacios en blanco");
         } else {
-            statusBar.setText(" ⦾ Espacios ocultos");
+            statusBar.setText(" Espacios ocultos");
             actualizarTexto();
         }
     }

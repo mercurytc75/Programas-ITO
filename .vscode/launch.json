@@ -3,6 +3,20 @@
   "configurations": [
     {
       "type": "java",
+      "name": "PingPong",
+      "request": "launch",
+      "mainClass": "Exame_Topicos.PingPong",
+      "projectName": "JAVA_TRADE_8e10cfb6"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Mineria.Main",
+      "projectName": "JAVA_TRADE_8e10cfb6"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "Monopoly.Main",

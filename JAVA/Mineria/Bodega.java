@@ -28,9 +28,10 @@ public class Bodega {
         50,
         "Diamante",
         150
+        
     );
 
-    private int dineroGenerado;
+    private int dineroGenerado; 
 
     private boolean comprador_especial_activo;
     private static final int MULTIPLICADOR_COMPRADOR = 2;
@@ -76,7 +77,7 @@ public class Bodega {
     private synchronized void activarCompradorEspecial() {
         comprador_especial_activo = true;
         System.out.println(
-            "🚛 [BODEGA] ¡¡¡COMPRADOR ESPECIAL!!! Pagará x2 en los próximos 10 segundos"
+            "[BODEGA] ¡¡¡COMPRADOR ESPECIAL!!! Pagará x2 en los próximos 10 segundos"
         );
 
         new Thread(() -> {
@@ -107,8 +108,8 @@ public class Bodega {
      * @return true si se almacenaron, false si no hay espacio
      */
     public synchronized boolean almacenar(List<Mineral> minerales) {
-        if (espacioDisponible >= minerales.size()) {
-            mineralesAlmacenados.addAll(minerales);
+        if (espacioDisponible >= minerales.size()/*cantidad de minerales a almacenar*/) {
+            mineralesAlmacenados.addAll(minerales);//agreaga a la lista de almacenados
             for (Mineral mineral : minerales) {
                 mineralesClasificados.merge(mineral.getTipo(), 1, Integer::sum);
             }
@@ -199,22 +200,21 @@ public class Bodega {
 
     /**
      * FASE 2: Vender minerales ahora (a precio estándar)
-</thinking>
      * @return Dinero obtenido de la venta
      */
     public synchronized int venderAhora() {
         if (mineralesAlmacenados.isEmpty()) {
-            System.out.println("❌ [BODEGA] No hay minerales para vender");
+            System.out.println("[BODEGA] No hay minerales para vender");
             return 0;
         }
 
         int totalVenta = 0;
         StringBuilder detalles = new StringBuilder(
-            "💵 [BODEGA] Venta inmediata:\n"
+            "[BODEGA] Venta inmediata:\n"
         );
 
-        for (Mineral mineral : mineralesAlmacenados) {
-            int precio = PRECIOS_BASE.getOrDefault(mineral.getTipo(), 10);
+        for (Mineral mineral : mineralesAlmacenados) {//si no lo encuentra devuelve 10n por defecto 
+            int precio = PRECIOS_BASE.getOrDefault(mineral.getTipo(), 10);// con getOrDefault para evitar NullPointerException si el tipo no está en el mapa
             totalVenta += precio;
             detalles.append(
                 String.format("  - %s: $%d\n", mineral.getTipo(), precio)
@@ -228,7 +228,7 @@ public class Bodega {
 
         System.out.println(detalles.toString());
         System.out.printf(
-            "💰 Total obtenido: $%d | Dinero acumulado: $%d%n",
+            "[BODEGA] Total obtenido: $%d | Dinero acumulado: $%d%n",
             totalVenta,
             dineroGenerado
         );
@@ -242,13 +242,13 @@ public class Bodega {
      */
     public synchronized int venderConCompradorEspecial() {
         if (mineralesAlmacenados.isEmpty()) {
-            System.out.println("❌ [BODEGA] No hay minerales para vender");
+            System.out.println("[BODEGA] No hay minerales para vender");
             return 0;
         }
 
         if (!comprador_especial_activo) {
             System.out.println(
-                "⚠️  [BODEGA] El comprador especial no está activo. Venta normal..."
+                "[BODEGA] El comprador especial no está activo. Venta normal..."
             );
             return venderAhora();
         }

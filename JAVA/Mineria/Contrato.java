@@ -78,7 +78,7 @@ public class Contrato {
         if (cantidadEntregada >= cantidadRequerida) {
             completado = true;
             System.out.printf(
-                "✅ [CONTRATO #%d] CUMPLIDO: %s %d/%d | Recompensa: $%d%n",
+                "[CONTRATO #%d] CUMPLIDO: %s %d/%d | Recompensa: $%d%n",
                 id,
                 tipoMineral,
                 cantidadEntregada,
@@ -89,7 +89,7 @@ public class Contrato {
         }
 
         System.out.printf(
-            "📋 [CONTRATO #%d] Progreso: %s %d/%d%n",
+            "[CONTRATO #%d] Progreso: %s %d/%d%n",
             id,
             tipoMineral,
             cantidadEntregada,

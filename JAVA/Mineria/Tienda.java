@@ -46,7 +46,7 @@ public class Tienda {
     public synchronized boolean comprarRobot(int nivel) {
         if (nivel < 1 || nivel > 3) {
             System.out.println(
-                "❌ [TIENDA] Nivel de robot inválido. Disponibles: 1, 2, 3"
+                " [TIENDA] Nivel de robot inválido. Disponibles: 1, 2, 3"
             );
             return false;
         }
@@ -57,7 +57,7 @@ public class Tienda {
         if (dineroDisponible < costo) {
             int falta = costo - dineroDisponible;
             System.out.printf(
-                "❌ [TIENDA] Dinero insuficiente. Tienes $%d, falta $%d%n",
+                " [TIENDA] Dinero insuficiente. Tienes $%d, falta $%d%n",
                 dineroDisponible,
                 falta
             );
@@ -82,12 +82,12 @@ public class Tienda {
         historialCompras.add(new ItemCompra("Robot", descripcion, costo));
 
         System.out.printf(
-            "✅ [TIENDA] Robot #%d (Nivel %d) comprado por $%d%n",
+            "[TIENDA] Robot #%d (Nivel %d) comprado por $%d%n",
             idRobot,
             nivel,
             costo
         );
-        System.out.printf("💰 Dinero restante: $%d%n", gameEngine.getDinero());
+        System.out.printf("[TIENDA] Dinero restante: $%d%n", gameEngine.getDinero());
 
         return true;
     }
@@ -103,7 +103,7 @@ public class Tienda {
         if (dineroDisponible < costo) {
             int falta = costo - dineroDisponible;
             System.out.printf(
-                "❌ [TIENDA] Dinero insuficiente para mejora de fundidora. Falta $%d%n",
+                "[TIENDA] Dinero insuficiente para mejora de fundidora. Falta $%d%n",
                 falta
             );
             return false;
@@ -130,12 +130,12 @@ public class Tienda {
         );
 
         System.out.printf(
-            "✅ [TIENDA] Fundidora mejorada a Nivel %d por $%d%n",
+            "[TIENDA] Fundidora mejorada a Nivel %d por $%d%n",
             nivelFundidora,
             costo
         );
         System.out.printf("   → Procesamiento más eficiente%n");
-        System.out.printf("💰 Dinero restante: $%d%n", gameEngine.getDinero());
+        System.out.printf("[TIENDA] Dinero restante: $%d%n", gameEngine.getDinero());
 
         return true;
     }
@@ -151,7 +151,7 @@ public class Tienda {
         if (dineroDisponible < costo) {
             int falta = costo - dineroDisponible;
             System.out.printf(
-                "❌ [TIENDA] Dinero insuficiente para mejora de bodega. Falta $%d%n",
+                "[TIENDA] Dinero insuficiente para mejora de bodega. Falta $%d%n",
                 falta
             );
             return false;
@@ -178,7 +178,7 @@ public class Tienda {
         );
 
         System.out.printf(
-            "✅ [TIENDA] Bodega mejorada a Nivel %d por $%d%n",
+            "[TIENDA] Bodega mejorada a Nivel %d por $%d%n",
             nivelBodega,
             costo
         );
@@ -186,7 +186,7 @@ public class Tienda {
             "   → Capacidad: %d unidades%n",
             capacidadActual + 50
         );
-        System.out.printf("💰 Dinero restante: $%d%n", gameEngine.getDinero());
+        System.out.printf("[TIENDA] Dinero restante: $%d%n", gameEngine.getDinero());
 
         return true;
     }
@@ -242,7 +242,7 @@ public class Tienda {
         menu.append("╚════════════════════════════════════════╝\n");
         menu.append(
             String.format(
-                "💰 Dinero disponible: $%d\n\n",
+                "Dinero disponible: $%d\n\n",
                 gameEngine.getDinero()
             )
         );

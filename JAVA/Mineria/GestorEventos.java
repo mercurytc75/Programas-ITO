@@ -19,10 +19,10 @@ public class GestorEventos {
     private static final int INTERVALO_EVENTOS_MAX = 60000; // 60 segundos
 
     public enum TipoEvento {
-        FALLO_ELECTRICO("⚡ Fallo eléctrico"),
-        DERRUMBE_ZONA("🌋 Derrumbe en zona"),
-        ROBOT_DAÑADO("🤖 Robot dañado"),
-        VETA_RICA("💎 Veta rica");
+        FALLO_ELECTRICO("Fallo eléctrico"),
+        DERRUMBE_ZONA("Derrumbe en zona"),
+        ROBOT_DAÑADO("Robot dañado"),
+        VETA_RICA("Veta rica");
 
         final String descripcion;
 
@@ -91,7 +91,7 @@ public class GestorEventos {
      */
     private void generarEvento(TipoEvento tipo) {
         System.out.println("\n" + "=".repeat(60));
-        System.out.printf("⚠️  EVENTO: %s%n", tipo.descripcion);
+        System.out.printf("EVENTO: %s%n", tipo.descripcion);
         System.out.println("=".repeat(60));
 
         switch (tipo) {
@@ -118,7 +118,7 @@ public class GestorEventos {
             "La fundidora sufre un fallo eléctrico — calor disparado al máximo por 10 segundos"
         );
         System.out.println(
-            "💡 Acción recomendada: Presiona 'Enfriar' para reducir el calor rápidamente"
+            "Acción recomendada: Presiona 'Enfriar' para reducir el calor rápidamente"
         );
 
         // Spike the heat immediately using the stored fundidora reference
@@ -155,7 +155,7 @@ public class GestorEventos {
             zonaAfectada.getNombre()
         );
         System.out.println(
-            "💡 Acción recomendada: Reasigna los robots de esa zona a otras"
+            "Acción recomendada: Reasigna los robots de esa zona a otras"
         );
 
         zonaAfectada.bloquear(20);
@@ -175,18 +175,18 @@ public class GestorEventos {
         if (nuevaEnergia == 0) {
             robotAfectado.setEstado(Robot.Estado.ROTO);
             System.out.printf(
-                "🔧 Robot #%d ha quedado ROTO — necesita reparación ($200)%n",
+                "Robot #%d ha quedado ROTO — necesita reparación ($200)%n",
                 robotAfectado.getRobotId()
             );
         } else {
             System.out.printf(
-                "⚠️  Robot #%d ha sufrido daños — energía al %d%%%n",
+                "Robot #%d ha sufrido daños — energía al %d%%%n",
                 robotAfectado.getRobotId(),
                 nuevaEnergia
             );
         }
         System.out.println(
-            "💡 Acción: Repara si está ROTO, o recarga si tiene poca energía"
+            "Acción: Repara si está ROTO, o recarga si tiene poca energía"
         );
     }
 
@@ -202,7 +202,7 @@ public class GestorEventos {
             zonaAfortunada.getNombre()
         );
         System.out.println(
-            "💡 Acción recomendada: Envía más robots a esa zona para aprovechar el bonus"
+            "Acción recomendada: Envía más robots a esa zona para aprovechar el bonus"
         );
 
         // Reponer la zona con bonus
