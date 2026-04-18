@@ -1,4 +1,3 @@
-import Monopoly.Jugador;
 
 public class PingPong {
     public static void main(String[] args) {
@@ -9,13 +8,10 @@ public class PingPong {
         Jugador j1 = new Jugador(1, pelota);
         Jugador j2 = new Jugador(2, pelota);
         
-        
-
         System.out.println("=== Inicio del juego de Ping Pong ===");
         j1.start();
         j2.start();
         
-
         try{    
             j1.join();
             j2.join();
@@ -24,6 +20,8 @@ public class PingPong {
             Thread.currentThread().interrupt();
         }
 
+        int ganador = pelota.getUltimoJugador();
         System.out.println("=== Juego terminado después de " + TotalDeIntercambios + " intercambios ===");
+        System.out.println("*** El ganador es el Jugador " + ganador + " ! ***");
     }
 }
