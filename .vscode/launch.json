@@ -3,6 +3,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "main",
+      "request": "launch",
+      "mainClass": "main",
+      "projectName": "JAVA_TRADE_8e10cfb6"
+    },
+    {
+      "type": "java",
       "name": "PingPong",
       "request": "launch",
       "mainClass": "Exame_Topicos.PingPong",
