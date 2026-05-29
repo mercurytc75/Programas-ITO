@@ -1,0 +1,12 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Introducción}{2}{section.1}%
+\contentsline {section}{\numberline {2}Diagrama Entidad-Relación}{2}{section.2}%
+\contentsline {section}{\numberline {3}Base de Datos antes de las Formas Normales}{2}{section.3}%
+\contentsline {section}{\numberline {4}Primera Forma Normal (1FN)}{4}{section.4}%
+\contentsline {section}{\numberline {5}Segunda Forma Normal (2FN)}{4}{section.5}%
+\contentsline {section}{\numberline {6}Tercera Forma Normal (3FN)}{5}{section.6}%
+\contentsline {section}{\numberline {7}Forma Normal Boyce-Codd (FNBC)}{6}{section.7}%
+\contentsline {section}{\numberline {8}Cuarta Forma Normal (4FN)}{6}{section.8}%
+\contentsline {section}{\numberline {9}Quinta Forma Normal (5FN)}{6}{section.9}%
+\contentsline {section}{\numberline {10}Diagrama de Esquema Lógico del Modelo}{8}{section.10}%
+\contentsline {section}{\numberline {11}Conclusiones}{8}{section.11}%
